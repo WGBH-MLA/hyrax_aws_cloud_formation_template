@@ -8,26 +8,26 @@
         },
         "RubyVersion": {
             "Description": "Version number for ruby",
-            "Default": "2.4.3",
+            "Default": "2.5.3",
             "Type": "String",
             "AllowedPattern": "(\\d+\\.){2}(\\d+)",
-            "ConstraintDescription": "must be the name of an number with 3 decimals."
+            "ConstraintDescription": "must be a valid Ruby version, e.g. 2.5.3."
         },
         "RailsVersion": {
-            "Description": "Version number for rails",
+            "Description": "Version number for Ruby on Rails",
             "Default": "5.1.5",
             "Type": "String",
             "AllowedPattern": "(\\d+\\.){2}(\\d+)",
-            "ConstraintDescription": "must be the name of an number with 3 decimals."
+            "ConstraintDescription": "must be a valid Ruby on Rails version, e.g. 5.1.5."
         },
-        "Envirement": {
-            "Default": "development",
-            "Description": "Rails Envirement name",
+        "Environment": {
+            "Default": "production",
+            "Description": "Rails Environment name",
             "Type": "String",
             "MinLength": "1",
             "MaxLength": "64",
             "AllowedPattern": "[a-zA-Z][a-zA-Z0-9]*",
-            "ConstraintDescription": "must begin with a letter and contain only alphanumeric characters."
+            "ConstraintDescription": "'production', 'development', 'test', or a custom Rails environment."
         },
         "RedisClusterNodeType": {
             "Description": "The compute and memory capacity of the nodes in the Redis Cluster",
@@ -113,7 +113,7 @@
             "Type": "String",
             "MinLength": "3",
             "MaxLength": "41",
-            "ConstraintDescription": "must contain only alphanumeric characters."
+            "ConstraintDescription": "must contain only alphanumeric characters, underscores, or dashes."
         },
         "WebInstanceType": {
             "Description": "WebServer EC2 instance type",
@@ -1130,7 +1130,9 @@
                         "Fn::Join": [
                             "",
                             [
-                                "#!/bin/bash\n",
+                                "#!/bin/bash -l\n",
+                                "echo 'CURRENT ENVIRONMENT!!!!'",
+                                "env",
                                 "\n",
                                 "sudo yum -y update\n",
                                 "\n",
@@ -1146,7 +1148,7 @@
                                 },
                                 "\n",
                                 "#Install ruby & rails\n",
-                                "curl -sSL https://get.rvm.io | bash\n",
+                                "curl -sSL https://get.rvm.io | bash -l\n",
                                 "source /etc/profile.d/rvm.sh\n",
                                 "rvm install ",
                                 {
@@ -1224,7 +1226,6 @@
                                 "sudo yum install -y httpd24 httpd24-devel\n",
                                 "\n",
                                 "gem install passenger\n",
-                                "passenger-install-apache2-module --auto \n",
                                 "passenger-install-apache2-module --auto --snippet > /etc/httpd/conf.d/passenger.conf \n",
                                 "\n",
                                 "echo '\n",
@@ -1233,7 +1234,7 @@
                                         "export RAILS_ENV=${RAILS_ENV}\n",
                                         {
                                             "RAILS_ENV": {
-                                                "Ref": "Envirement"
+                                                "Ref": "Environment"
                                             }
                                         }
                                     ]
@@ -1297,7 +1298,7 @@
                                                                 "PublicDnsName"
                                                             ]
                                                         },
-                                                        ":8983/solr/",
+                                                        ":8983/solr/#/",
                                                         {
                                                             "Ref": "SolrCoreName"
                                                         },
@@ -1359,7 +1360,7 @@
                                             "SetEnv",
                                             "RAILS_ENV",
                                             {
-                                                "Ref": "Envirement"
+                                                "Ref": "Environment"
                                             },
                                             "\n"
                                         ]
@@ -1438,7 +1439,7 @@
                                                                 "PublicDnsName"
                                                             ]
                                                         },
-                                                        ":8983/solr/",
+                                                        ":8983/solr/#/",
                                                         {
                                                             "Ref": "SolrCoreName"
                                                         },
