@@ -995,7 +995,7 @@
                                 "echo 'JAVA_OPTS=\"${JAVA_OPTS} -Dfcrepo.home=/mnt/fedora-data\"' >> /etc/sysconfig/tomcat7\n",
                                 "mkdir /mnt/fedora-data\n",
                                 "chown tomcat:tomcat /mnt/fedora-data/\n",
-                                "wget https://github.com/fcrepo4/fcrepo4/releases/download/fcrepo-4.5.1/fcrepo-webapp-4.5.1.war\n",
+                                "wget https://github.com/fcrepo4/fcrepo4/releases/download/fcrepo-4.7.5/fcrepo-webapp-4.7.5.war\n",
                                 "cp fcrepo-webapp-4.5.1.war /var/lib/tomcat7/webapps/\n",
                                 "echo 'fcrepo.home=/mnt/fedora-data' >> /etc/tomcat7/catalina.properties\n",
                                 "service tomcat7 restart\n",
