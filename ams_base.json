@@ -107,6 +107,48 @@
             "AllowedPattern": "[a-zA-Z0-9]*",
             "ConstraintDescription": "must contain only alphanumeric characters."
         },
+        "FedoraRDSMYSQLInstanceClass": {
+            "Default": "db.t2.small",
+            "Description": "The Fedora database instance type",
+            "Type": "String",
+            "AllowedValues": [
+                "db.t2.small",
+                "db.t2.medium",
+                "db.m1.small",
+                "db.m1.large",
+                "db.m1.xlarge",
+                "db.m2.xlarge",
+                "db.m2.2xlarge",
+                "db.m2.4xlarge"
+            ],
+            "ConstraintDescription": "must contain only alphanumeric characters."
+        },
+        "FedoraRDSMYSQLStorage": {
+            "Default": "20",
+            "Description": "The size of the Fedora database (Gb)",
+            "Type": "Number",
+            "MinValue": "20",
+            "MaxValue": "1024",
+            "ConstraintDescription": "must be between 5 and 1024Gb."
+        },
+        "FedoraDBUser": {
+            "Default": "fedora",
+            "Description": "Mysql username used by Fedora",
+            "Type": "String",
+            "MinLength": "3",
+            "MaxLength": "41",
+            "AllowedPattern": "[a-zA-Z0-9]*",
+            "ConstraintDescription": "must contain only alphanumeric characters."
+        },
+        "FedoraDBPassword": {
+            "NoEcho": "true",
+            "Description": "MySQL password used by Fedora",
+            "Type": "String",
+            "MinLength": "1",
+            "MaxLength": "41",
+            "AllowedPattern": "[a-zA-Z0-9]*",
+            "ConstraintDescription": "must contain only alphanumeric characters."
+        },
         "SolrCoreName": {
             "Default": "ams",
             "Description": "Solr Core name",
@@ -823,6 +865,36 @@
             },
             "DeletionPolicy": "Snapshot"
         },
+        "FedoraRDSDB": {
+            "Type": "AWS::RDS::DBInstance",
+            "Properties": {
+                "DBName": "repo",
+                "AllocatedStorage": {
+                    "Ref": "FedoraRDSMYSQLStorage"
+                },
+                "DBInstanceClass": {
+                    "Ref": "FedoraRDSMYSQLInstanceClass"
+                },
+                "Engine": "MySQL",
+                "EngineVersion": "5.5",
+                "DBSubnetGroupName": {
+                    "Ref": "MyDBSubnetGroup"
+                },
+                "VPCSecurityGroups": [
+                    {
+                        "Ref": "VPCDBSecurityGroup"
+                    }
+                ],
+                "MasterUsername": {
+                    "Ref": "FedoraDBUser"
+                },
+                "MasterUserPassword": {
+                    "Ref": "FedoraDBPassword"
+                },
+                "MultiAZ": "false"
+            },
+            "DeletionPolicy": "Snapshot"
+        },
         "CacheSubnetGroup": {
             "Type": "AWS::ElastiCache::SubnetGroup",
             "Properties": {
@@ -896,6 +968,7 @@
         },
         "DataInstance": {
             "Type": "AWS::EC2::Instance",
+            "DependsOn": "FedoraRDSDB",
             "Properties": {
                 "DisableApiTermination": "false",
                 "BlockDeviceMappings": [
@@ -989,6 +1062,8 @@
                                 "#Install Java 8\n",
                                 "yum -y remove java-1.7.0-openjdk\n",
                                 "yum -y install java-1.8.0\n",
+                                "#Install mysql-devel\n",
+                                "yum -y install mysql-devel\n",
                                 "\n",
                                 "#Install Fedora\n",
                                 "yum -y install tomcat7\n",
@@ -996,8 +1071,12 @@
                                 "mkdir /mnt/fedora-data\n",
                                 "chown tomcat:tomcat /mnt/fedora-data/\n",
                                 "wget https://github.com/fcrepo4/fcrepo4/releases/download/fcrepo-4.7.5/fcrepo-webapp-4.7.5.war\n",
-                                "cp fcrepo-webapp-4.5.1.war /var/lib/tomcat7/webapps/\n",
+                                "cp fcrepo-webapp-4.7.5.war /var/lib/tomcat7/webapps/\n",
                                 "echo 'fcrepo.home=/mnt/fedora-data' >> /etc/tomcat7/catalina.properties\n",
+                                "echo 'fcrepo.mysql.host=", { "Fn::GetAtt": ["FedoraRDSDB", "Endpoint.Address" ] },"' >> /etc/tomcat7/catalina.properties\n",
+                                "echo 'fcrepo.mysql.username=", { "Ref": "FedoraDBUser" }, "' >> /etc/tomcat7/catalina.properties\n",
+                                "echo 'fcrepo.mysql.password=", { "Ref": "FedoraDBPassword" }, "' >> /etc/tomcat7/catalina.properties\n",
+                                "echo 'fcrepo.modeshape.configuration=file:/var/lib/tomcat7/webapps/fcrepo-webapp-4.7.5/WEB-INF/classes/config/jdbc-mysql/repository.json' >> /etc/tomcat7/catalina.properties\n",
                                 "service tomcat7 restart\n",
                                 "wget http://archive.apache.org/dist/lucene/solr/6.5.0/solr-6.5.0.tgz\n",
                                 "tar xzf solr-6.5.0.tgz solr-6.5.0/bin/install_solr_service.sh --strip-components=2\n",
@@ -1254,6 +1333,39 @@
                                 },
                                 {
                                     "Fn::Sub": [
+                                        "export FEDORA_DB_HOST=${FEDORA_DB_HOST}\n",
+                                        {
+                                            "FEDORA_DB_HOST": {
+                                                "Fn::GetAtt": [
+                                                    "FedoraRDSDB",
+                                                    "Endpoint.Address"
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "Fn::Sub": [
+                                        "export FEDORA_DB_USER=${FEDORA_DB_USER}\n",
+                                        {
+                                            "FEDORA_DB_USER": {
+                                                "Ref": "FedoraDBUser"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "Fn::Sub": [
+                                        "export FEDORA_DB_PWD=${FEDORA_DB_PWD}\n",
+                                        {
+                                            "FEDORA_DB_PWD": {
+                                                "Ref": "FedoraDBPassword"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "Fn::Sub": [
                                         "export SOLR_URL=${SOLR_URL}\n",
                                         {
                                             "SOLR_URL": {
@@ -1295,7 +1407,7 @@
                                                                 "PublicDnsName"
                                                             ]
                                                         },
-                                                        ":8080/fcrepo-webapp-4.5.1/rest",
+                                                        ":8080/fcrepo-webapp-4.7.5/rest",
                                                         "\""
                                                     ]
                                                 ]
@@ -1439,7 +1551,7 @@
                                                                 "PublicDnsName"
                                                             ]
                                                         },
-                                                        ":8080/fcrepo-webapp-4.5.1/rest",
+                                                        ":8080/fcrepo-webapp-4.7.5/rest",
                                                         "\""
                                                     ]
                                                 ]
@@ -2150,7 +2262,7 @@
                                 "PublicDnsName"
                             ]
                         },
-                        ":8080/fcrepo-webapp-4.5.1/rest"
+                        ":8080/fcrepo-webapp-4.7.5/rest"
                     ]
                 ]
             },
