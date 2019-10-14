@@ -65,10 +65,8 @@
                 "db.t2.medium",
                 "db.m1.small",
                 "db.m1.large",
-                "db.m1.xlarge",
-                "db.m2.xlarge",
-                "db.m2.2xlarge",
-                "db.m2.4xlarge"
+                "db.m4.xlarge",
+                "db.m4.4xlarge",
             ],
             "ConstraintDescription": "must contain only alphanumeric characters."
         },
@@ -115,11 +113,10 @@
                 "db.t2.small",
                 "db.t2.medium",
                 "db.m1.small",
-                "db.m1.large",
-                "db.m1.xlarge",
-                "db.m2.xlarge",
-                "db.m2.2xlarge",
-                "db.m2.4xlarge"
+                "db.m4.large",
+                "db.m4.xlarge",
+                "db.m4.2xlarge",
+                "db.m4.4xlarge"
             ],
             "ConstraintDescription": "must contain only alphanumeric characters."
         },
