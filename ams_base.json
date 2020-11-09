@@ -1237,7 +1237,7 @@
                                 "#Install Node\n",
                                 "curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.6/install.sh | NVM_DIR=/usr/local/nvm bash\n",
                                 ". /usr/local/nvm/nvm.sh\n",
-                                "nvm install stable\n",
+                                "nvm install 12.9.0\n",
                                 "echo 'export NVM_DIR=\"/usr/local/nvm\"' >> /etc/profile\n",
                                 "echo '[ -s \"$NVM_DIR/nvm.sh\" ] && \\. \"$NVM_DIR/nvm.sh\"  # This loads nvm' >> /etc/profile\n",
                                 "echo '[ -s \"$NVM_DIR/bash_completion\" ] && \\. \"$NVM_DIR/bash_completion\"  # This loads nvm bash_completion' >> /etc/profile\n",
