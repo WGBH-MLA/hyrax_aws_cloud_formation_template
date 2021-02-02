@@ -641,9 +641,9 @@
         },
         "AWSRegionArch2AMI": {
             "us-east-1": {
-                "PV64": "ami-2a69aa47",
-                "HVM64": "ami-97785bed",
-                "HVMG2": "ami-0a6e3770"
+                "PV64": "ami-036de34578cbfa625",
+                "HVM64": "ami-047a51fa27710816e",
+                "HVMG2": "ami-087435bc474caa2c4"
             },
             "us-west-2": {
                 "PV64": "ami-7f77b31f",
@@ -843,7 +843,7 @@
                     "Ref": "RDSMYSQLInstanceClass"
                 },
                 "Engine": "MySQL",
-                "EngineVersion": "5.5",
+                "EngineVersion": "5.7",
                 "DBSubnetGroupName": {
                     "Ref": "MyDBSubnetGroup"
                 },
@@ -873,7 +873,7 @@
                     "Ref": "FedoraRDSMYSQLInstanceClass"
                 },
                 "Engine": "MySQL",
-                "EngineVersion": "5.5",
+                "EngineVersion": "5.7",
                 "DBSubnetGroupName": {
                     "Ref": "MyDBSubnetGroup"
                 },
@@ -1063,18 +1063,18 @@
                                 "yum -y install mysql-devel\n",
                                 "\n",
                                 "#Install Fedora\n",
-                                "yum -y install tomcat7\n",
+                                "yum -y install tomcat\n",
                                 "echo 'JAVA_OPTS=\"${JAVA_OPTS} -Dfcrepo.home=/mnt/fedora-data\"' >> /etc/sysconfig/tomcat7\n",
                                 "mkdir /mnt/fedora-data\n",
                                 "chown tomcat:tomcat /mnt/fedora-data/\n",
                                 "wget https://github.com/fcrepo4/fcrepo4/releases/download/fcrepo-4.7.5/fcrepo-webapp-4.7.5.war\n",
-                                "cp fcrepo-webapp-4.7.5.war /var/lib/tomcat7/webapps/\n",
-                                "echo 'fcrepo.home=/mnt/fedora-data' >> /etc/tomcat7/catalina.properties\n",
-                                "echo 'fcrepo.mysql.host=", { "Fn::GetAtt": ["FedoraRDSDB", "Endpoint.Address" ] },"' >> /etc/tomcat7/catalina.properties\n",
-                                "echo 'fcrepo.mysql.username=", { "Ref": "FedoraDBUser" }, "' >> /etc/tomcat7/catalina.properties\n",
-                                "echo 'fcrepo.mysql.password=", { "Ref": "FedoraDBPassword" }, "' >> /etc/tomcat7/catalina.properties\n",
-                                "echo 'fcrepo.modeshape.configuration=file:/var/lib/tomcat7/webapps/fcrepo-webapp-4.7.5/WEB-INF/classes/config/jdbc-mysql/repository.json' >> /etc/tomcat7/catalina.properties\n",
-                                "service tomcat7 restart\n",
+                                "cp fcrepo-webapp-4.7.5.war /var/lib/tomcat/webapps/\n",
+                                "echo 'fcrepo.home=/mnt/fedora-data' >> /etc/tomcat/catalina.properties\n",
+                                "echo 'fcrepo.mysql.host=", { "Fn::GetAtt": ["FedoraRDSDB", "Endpoint.Address" ] },"' >> /etc/tomcat/catalina.properties\n",
+                                "echo 'fcrepo.mysql.username=", { "Ref": "FedoraDBUser" }, "' >> /etc/tomcat/catalina.properties\n",
+                                "echo 'fcrepo.mysql.password=", { "Ref": "FedoraDBPassword" }, "' >> /etc/tomcat/catalina.properties\n",
+                                "echo 'fcrepo.modeshape.configuration=file:/var/lib/tomcat/webapps/fcrepo-webapp-4.7.5/WEB-INF/classes/config/jdbc-mysql/repository.json' >> /etc/tomcat/catalina.properties\n",
+                                "service tomcat restart\n",
                                 "wget http://archive.apache.org/dist/lucene/solr/6.5.0/solr-6.5.0.tgz\n",
                                 "tar xzf solr-6.5.0.tgz solr-6.5.0/bin/install_solr_service.sh --strip-components=2\n",
                                 "./install_solr_service.sh solr-6.5.0.tgz\n",
@@ -1096,7 +1096,7 @@
                                 },
                                 "/opt/solr/bin/init.d/solr restart\n",
                                 "\n",
-                                "chkconfig tomcat7 on\n",
+                                "chkconfig tomcat on\n",
                                 "chkconfig solr on\n",
                                 "/opt/aws/bin/cfn-signal -e 0",
                                 "\n"
@@ -1267,7 +1267,7 @@
                                 "echo 'export PATH=$PATH:/opt/fits-1.0.5/' >> /etc/profile\n",
                                 "#Install Apache\n",
                                 "yum install -y curl-devel nano sqlite-devel libyaml-devel   \n",
-                                "yum install -y httpd24 httpd24-devel\n",
+                                "yum install -y httpd httpd-devel links\n",
                                 "su - ec2-user -c 'gem install passenger'\n",
                                 "su - ec2-user -c 'passenger-install-apache2-module --auto'\n",
                                 "su - ec2-user -c 'passenger-install-apache2-module --snippet > /tmp/passenger.conf'\n",
@@ -1432,6 +1432,150 @@
                                 "\n",
                                 "    # Tell Apache and Passenger where your apps public directory is\n",
                                 "    DocumentRoot /var/www/ams/public\n",
+<<<<<<< HEAD:ams.new_app.json
+=======
+                                {
+                                    "Fn::Join": [
+                                        " ",
+                                        [
+                                            "SetEnv",
+                                            "RAILS_ENV",
+                                            {
+                                                "Ref": "Environment"
+                                            },
+                                            "\n"
+                                        ]
+                                    ]
+                                },
+                                {
+                                    "Fn::Join": [
+                                        " ",
+                                        [
+                                            "SetEnv",
+                                            "DB_HOST",
+                                            {
+                                                "Fn::GetAtt": [
+                                                    "RDSDB",
+                                                    "Endpoint.Address"
+                                                ]
+                                            },
+                                            "\n"
+                                        ]
+                                    ]
+                                },
+                                {
+                                    "Fn::Join": [
+                                        " ",
+                                        [
+                                            "SetEnv",
+                                            "DB_NAME",
+                                            {
+                                                "Ref": "DBName"
+                                            },
+                                            "\n"
+                                        ]
+                                    ]
+                                },
+                                {
+                                    "Fn::Join": [
+                                        " ",
+                                        [
+                                            "SetEnv",
+                                            "DB_USER",
+                                            {
+                                                "Ref": "DBUser"
+                                            },
+                                            "\n"
+                                        ]
+                                    ]
+                                },
+                                {
+                                    "Fn::Join": [
+                                        " ",
+                                        [
+                                            "SetEnv",
+                                            "DB_PWD",
+                                            {
+                                                "Ref": "DBPassword"
+                                            },
+                                            "\n"
+                                        ]
+                                    ]
+                                },
+                                {
+                                    "Fn::Join": [
+                                        " ",
+                                        [
+                                            "SetEnv",
+                                            "SOLR_URL",
+                                            {
+                                                "Fn::Join": [
+                                                    "",
+                                                    [
+                                                        "\"",
+                                                        "http://",
+                                                        {
+                                                            "Fn::GetAtt": [
+                                                                "DataInstance",
+                                                                "PublicDnsName"
+                                                            ]
+                                                        },
+                                                        ":8983/solr/",
+                                                        {
+                                                            "Ref": "SolrCoreName"
+                                                        },
+                                                        "\""
+                                                    ]
+                                                ]
+                                            },
+                                            "\n"
+                                        ]
+                                    ]
+                                },
+                                {
+                                    "Fn::Join": [
+                                        " ",
+                                        [
+                                            "SetEnv",
+                                            "FCREPO_URL",
+                                            {
+                                                "Fn::Join": [
+                                                    "",
+                                                    [
+                                                        "\"",
+                                                        "http://",
+                                                        {
+                                                            "Fn::GetAtt": [
+                                                                "DataInstance",
+                                                                "PublicDnsName"
+                                                            ]
+                                                        },
+                                                        ":8080/fcrepo-webapp-4.7.5/rest",
+                                                        "\""
+                                                    ]
+                                                ]
+                                            },
+                                            "\n"
+                                        ]
+                                    ]
+                                },
+                                {
+                                    "Fn::Join": [
+                                        " ",
+                                        [
+                                            "SetEnv",
+                                            "REDIS_SERVER",
+                                            {
+                                                "Fn::GetAtt": [
+                                                    "RedisCluster",
+                                                    "RedisEndpoint.Address"
+                                                ]
+                                            },
+                                            "\n"
+                                        ]
+                                    ]
+                                },
+>>>>>>> Upgrade to Amazon Linux 2 and set up for SSL:ams_base.json
                                 "\n",
                                 "    # Relax Apache security settings\n",
                                 "    <Directory /var/www/ams/public>\n",
@@ -1445,10 +1589,21 @@
                                 "\n",
                                 "#Configure Apache\n",
                                 "usermod -a -G apache ec2-user\n",
-                                "service httpd restart\n",
+                                "systemctl restart httpd\n",
                                 "\n",
                                 "chkconfig httpd on\n",
                                 "\n",
+                                "#Prepare SSL\n",
+                                "yum install -y mod_ssl\n",
+                                "cd /etc/pki/tls/certs\n",
+                                "./make-dummy-cert localhost.crt\n",
+                                "sed -e '/SSLCertificateKeyFile/s/^#*/#/' -i /etc/httpd/conf.d/ssl.conf\n",
+                                "systemctl restart httpd\n",
+                                "cd /home/ec2-user\n",
+                                "wget -r --no-parent -A 'epel-release-*.rpm' https://dl.fedoraproject.org/pub/epel/7/x86_64/Packages/e/\n",
+                                "rpm -Uvh dl.fedoraproject.org/pub/epel/7/x86_64/Packages/e/epel-release-*.rpm\n",
+                                "yum-config-manager --enable epel*\n",
+                                "yum install -y certbot python2-certbot-apache\n",
                                 "#Install code deploy\n",
                                 "mkdir /tmp/codedeploy\n",
                                 "cd /tmp/codedeploy\n",
@@ -1855,6 +2010,12 @@
                         "IpProtocol": "tcp",
                         "FromPort": "80",
                         "ToPort": "80",
+                        "CidrIp": "0.0.0.0/0"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "443",
+                        "ToPort": "443",
                         "CidrIp": "0.0.0.0/0"
                     },
                     {
