@@ -1,0 +1,2158 @@
+{
+    "Parameters": {
+        "KeyName": {
+            "Description": "Name of an existing EC2 KeyPair to enable SSH access to the instances",
+            "Default": "",
+            "Type": "AWS::EC2::KeyPair::KeyName",
+            "ConstraintDescription": "must be the name of an existing EC2 KeyPair."
+        },
+        "RubyVersion": {
+            "Description": "Version number for ruby",
+            "Default": "2.5.3",
+            "Type": "String",
+            "AllowedPattern": "(\\d+\\.){2}(\\d+)",
+            "ConstraintDescription": "must be a valid Ruby version, e.g. 2.5.3."
+        },
+        "RailsVersion": {
+            "Description": "Version number for Ruby on Rails",
+            "Default": "5.1.5",
+            "Type": "String",
+            "AllowedPattern": "(\\d+\\.){2}(\\d+)",
+            "ConstraintDescription": "must be a valid Ruby on Rails version, e.g. 5.1.5."
+        },
+        "Environment": {
+            "Default": "production",
+            "Description": "Rails Environment name",
+            "Type": "String",
+            "MinLength": "1",
+            "MaxLength": "64",
+            "AllowedPattern": "[a-zA-Z][a-zA-Z0-9]*",
+            "ConstraintDescription": "'production', 'development', 'test', or a custom Rails environment."
+        },
+        "RedisClusterNodeType": {
+            "Description": "The compute and memory capacity of the nodes in the Redis Cluster",
+            "Type": "String",
+            "Default": "cache.t2.micro",
+            "AllowedValues": [
+                "cache.m1.small",
+                "cache.m1.large",
+                "cache.m1.xlarge",
+                "cache.m2.xlarge",
+                "cache.m2.2xlarge",
+                "cache.m2.4xlarge",
+                "cache.c1.xlarge",
+                "cache.t2.micro",
+                "cache.t2.small",
+                "cache.t2.medium",
+                "cache.m3.medium",
+                "cache.m3.large",
+                "cache.m3.xlarge",
+                "cache.m3.2xlarge",
+                "cache.r3.large",
+                "cache.r3.xlarge",
+                "cache.r3.2xlarge",
+                "cache.r3.4xlarge",
+                "cache.r3.8xlarge"
+            ],
+            "ConstraintDescription": "must select a valid Redis Cache Node type."
+        },
+        "RDSMYSQLInstanceClass": {
+            "Default": "db.t2.small",
+            "Description": "The database instance type",
+            "Type": "String",
+            "AllowedValues": [
+                "db.t2.small",
+                "db.t2.medium",
+                "db.m1.small",
+                "db.m1.large",
+                "db.m4.xlarge",
+                "db.m4.4xlarge"
+            ],
+            "ConstraintDescription": "must contain only alphanumeric characters."
+        },
+        "RDSMYSQLStorage": {
+            "Default": "20",
+            "Description": "The size of the database (Gb)",
+            "Type": "Number",
+            "MinValue": "20",
+            "MaxValue": "1024",
+            "ConstraintDescription": "must be between 5 and 1024Gb."
+        },
+        "DBName": {
+            "Default": "hyrax",
+            "Description": "Name for MySQL database",
+            "Type": "String",
+            "MinLength": "3",
+            "MaxLength": "41",
+            "AllowedPattern": "[a-zA-Z0-9]*",
+            "ConstraintDescription": "must contain only alphanumeric characters."
+        },
+        "DBUser": {
+            "Default": "hyrax",
+            "Description": "Username for MySQL database access",
+            "Type": "String",
+            "MinLength": "3",
+            "MaxLength": "41",
+            "AllowedPattern": "[a-zA-Z0-9]*",
+            "ConstraintDescription": "must contain only alphanumeric characters."
+        },
+        "DBPassword": {
+            "NoEcho": "true",
+            "Description": "Password MySQL database access",
+            "Type": "String",
+            "MinLength": "1",
+            "MaxLength": "41",
+            "AllowedPattern": "[a-zA-Z0-9]*",
+            "ConstraintDescription": "must contain only alphanumeric characters."
+        },
+        "FedoraRDSMYSQLInstanceClass": {
+            "Default": "db.t2.small",
+            "Description": "The Fedora database instance type",
+            "Type": "String",
+            "AllowedValues": [
+                "db.t2.small",
+                "db.t2.medium",
+                "db.m1.small",
+                "db.m4.large",
+                "db.m4.xlarge",
+                "db.m4.2xlarge",
+                "db.m4.4xlarge"
+            ],
+            "ConstraintDescription": "must contain only alphanumeric characters."
+        },
+        "FedoraRDSMYSQLStorage": {
+            "Default": "20",
+            "Description": "The size of the Fedora database (Gb)",
+            "Type": "Number",
+            "MinValue": "20",
+            "MaxValue": "1024",
+            "ConstraintDescription": "must be between 5 and 1024Gb."
+        },
+        "FedoraDBUser": {
+            "Default": "fedora",
+            "Description": "Mysql username used by Fedora",
+            "Type": "String",
+            "MinLength": "3",
+            "MaxLength": "41",
+            "AllowedPattern": "[a-zA-Z0-9]*",
+            "ConstraintDescription": "must contain only alphanumeric characters."
+        },
+        "FedoraDBPassword": {
+            "NoEcho": "true",
+            "Description": "MySQL password used by Fedora",
+            "Type": "String",
+            "MinLength": "1",
+            "MaxLength": "41",
+            "AllowedPattern": ".*{7}",
+            "ConstraintDescription": "must be at least 7 characters long"
+        },
+        "SolrCoreName": {
+            "Default": "ams",
+            "Description": "Solr Core name",
+            "Type": "String",
+            "MinLength": "3",
+            "MaxLength": "41",
+            "ConstraintDescription": "must contain only alphanumeric characters, underscores, or dashes."
+        },
+        "WebInstanceType": {
+            "Description": "WebServer EC2 instance type",
+            "Type": "String",
+            "Default": "t2.medium",
+            "AllowedValues": [
+                "t1.micro",
+                "t2.nano",
+                "t2.micro",
+                "t2.small",
+                "t2.medium",
+                "t2.large",
+                "m1.small",
+                "m1.medium",
+                "m1.large",
+                "m1.xlarge",
+                "m2.xlarge",
+                "m2.2xlarge",
+                "m2.4xlarge",
+                "m3.medium",
+                "m3.large",
+                "m3.xlarge",
+                "m3.2xlarge",
+                "m4.large",
+                "m4.xlarge",
+                "m4.2xlarge",
+                "m4.4xlarge",
+                "m4.10xlarge",
+                "c1.medium",
+                "c1.xlarge",
+                "c3.large",
+                "c3.xlarge",
+                "c3.2xlarge",
+                "c3.4xlarge",
+                "c3.8xlarge",
+                "c4.large",
+                "c4.xlarge",
+                "c4.2xlarge",
+                "c4.4xlarge",
+                "c4.8xlarge",
+                "g2.2xlarge",
+                "g2.8xlarge",
+                "r3.large",
+                "r3.xlarge",
+                "r3.2xlarge",
+                "r3.4xlarge",
+                "r3.8xlarge",
+                "i2.xlarge",
+                "i2.2xlarge",
+                "i2.4xlarge",
+                "i2.8xlarge",
+                "d2.xlarge",
+                "d2.2xlarge",
+                "d2.4xlarge",
+                "d2.8xlarge",
+                "hi1.4xlarge",
+                "hs1.8xlarge",
+                "cr1.8xlarge",
+                "cc2.8xlarge",
+                "cg1.4xlarge"
+            ],
+            "ConstraintDescription": "must be a valid EC2 instance type."
+        },
+        "WebInstanceVolumeSize": {
+            "Description": "Size of the EBS volume if attached",
+            "Type": "Number",
+            "Default": "8",
+            "MinValue": "1",
+            "MaxValue": "1000"
+        },
+        "DataInstanceType": {
+            "Description": "Data EC2 instance type",
+            "Type": "String",
+            "Default": "t2.medium",
+            "AllowedValues": [
+                "t1.micro",
+                "t2.nano",
+                "t2.micro",
+                "t2.small",
+                "t2.medium",
+                "t2.large",
+                "m1.small",
+                "m1.medium",
+                "m1.large",
+                "m1.xlarge",
+                "m2.xlarge",
+                "m2.2xlarge",
+                "m2.4xlarge",
+                "m3.medium",
+                "m3.large",
+                "m3.xlarge",
+                "m3.2xlarge",
+                "m4.large",
+                "m4.xlarge",
+                "m4.2xlarge",
+                "m4.4xlarge",
+                "m4.10xlarge",
+                "c1.medium",
+                "c1.xlarge",
+                "c3.large",
+                "c3.xlarge",
+                "c3.2xlarge",
+                "c3.4xlarge",
+                "c3.8xlarge",
+                "c4.large",
+                "c4.xlarge",
+                "c4.2xlarge",
+                "c4.4xlarge",
+                "c4.8xlarge",
+                "g2.2xlarge",
+                "g2.8xlarge",
+                "r3.large",
+                "r3.xlarge",
+                "r3.2xlarge",
+                "r3.4xlarge",
+                "r3.8xlarge",
+                "i2.xlarge",
+                "i2.2xlarge",
+                "i2.4xlarge",
+                "i2.8xlarge",
+                "d2.xlarge",
+                "d2.2xlarge",
+                "d2.4xlarge",
+                "d2.8xlarge",
+                "hi1.4xlarge",
+                "hs1.8xlarge",
+                "cr1.8xlarge",
+                "cc2.8xlarge",
+                "cg1.4xlarge"
+            ],
+            "ConstraintDescription": "must be a valid EC2 instance type."
+        },
+        "DataInstanceVolumeSize": {
+            "Description": "Size of the EBS volume if attached",
+            "Type": "Number",
+            "Default": "8",
+            "MinValue": "1",
+            "MaxValue": "1000"
+        },
+        "SSHLocation": {
+            "Description": " The IP address range that can be used to SSH to the EC2 instances",
+            "Type": "String",
+            "MinLength": "9",
+            "MaxLength": "18",
+            "Default": "0.0.0.0/0",
+            "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+            "ConstraintDescription": "must be a valid IP CIDR range of the form x.x.x.x/x."
+        }
+    },
+    "Mappings": {
+        "AWSInstanceType2Arch": {
+            "t1.micro": {
+                "Arch": "PV64"
+            },
+            "t2.nano": {
+                "Arch": "HVM64"
+            },
+            "t2.micro": {
+                "Arch": "HVM64"
+            },
+            "t2.small": {
+                "Arch": "HVM64"
+            },
+            "t2.medium": {
+                "Arch": "HVM64"
+            },
+            "t2.large": {
+                "Arch": "HVM64"
+            },
+            "m1.small": {
+                "Arch": "PV64"
+            },
+            "m1.medium": {
+                "Arch": "PV64"
+            },
+            "m1.large": {
+                "Arch": "PV64"
+            },
+            "m1.xlarge": {
+                "Arch": "PV64"
+            },
+            "m2.xlarge": {
+                "Arch": "PV64"
+            },
+            "m2.2xlarge": {
+                "Arch": "PV64"
+            },
+            "m2.4xlarge": {
+                "Arch": "PV64"
+            },
+            "m3.medium": {
+                "Arch": "HVM64"
+            },
+            "m3.large": {
+                "Arch": "HVM64"
+            },
+            "m3.xlarge": {
+                "Arch": "HVM64"
+            },
+            "m3.2xlarge": {
+                "Arch": "HVM64"
+            },
+            "m4.large": {
+                "Arch": "HVM64"
+            },
+            "m4.xlarge": {
+                "Arch": "HVM64"
+            },
+            "m4.2xlarge": {
+                "Arch": "HVM64"
+            },
+            "m4.4xlarge": {
+                "Arch": "HVM64"
+            },
+            "m4.10xlarge": {
+                "Arch": "HVM64"
+            },
+            "c1.medium": {
+                "Arch": "PV64"
+            },
+            "c1.xlarge": {
+                "Arch": "PV64"
+            },
+            "c3.large": {
+                "Arch": "HVM64"
+            },
+            "c3.xlarge": {
+                "Arch": "HVM64"
+            },
+            "c3.2xlarge": {
+                "Arch": "HVM64"
+            },
+            "c3.4xlarge": {
+                "Arch": "HVM64"
+            },
+            "c3.8xlarge": {
+                "Arch": "HVM64"
+            },
+            "c4.large": {
+                "Arch": "HVM64"
+            },
+            "c4.xlarge": {
+                "Arch": "HVM64"
+            },
+            "c4.2xlarge": {
+                "Arch": "HVM64"
+            },
+            "c4.4xlarge": {
+                "Arch": "HVM64"
+            },
+            "c4.8xlarge": {
+                "Arch": "HVM64"
+            },
+            "g2.2xlarge": {
+                "Arch": "HVMG2"
+            },
+            "g2.8xlarge": {
+                "Arch": "HVMG2"
+            },
+            "r3.large": {
+                "Arch": "HVM64"
+            },
+            "r3.xlarge": {
+                "Arch": "HVM64"
+            },
+            "r3.2xlarge": {
+                "Arch": "HVM64"
+            },
+            "r3.4xlarge": {
+                "Arch": "HVM64"
+            },
+            "r3.8xlarge": {
+                "Arch": "HVM64"
+            },
+            "i2.xlarge": {
+                "Arch": "HVM64"
+            },
+            "i2.2xlarge": {
+                "Arch": "HVM64"
+            },
+            "i2.4xlarge": {
+                "Arch": "HVM64"
+            },
+            "i2.8xlarge": {
+                "Arch": "HVM64"
+            },
+            "d2.xlarge": {
+                "Arch": "HVM64"
+            },
+            "d2.2xlarge": {
+                "Arch": "HVM64"
+            },
+            "d2.4xlarge": {
+                "Arch": "HVM64"
+            },
+            "d2.8xlarge": {
+                "Arch": "HVM64"
+            },
+            "hi1.4xlarge": {
+                "Arch": "HVM64"
+            },
+            "hs1.8xlarge": {
+                "Arch": "HVM64"
+            },
+            "cr1.8xlarge": {
+                "Arch": "HVM64"
+            },
+            "cc2.8xlarge": {
+                "Arch": "HVM64"
+            }
+        },
+        "SubnetConfig": {
+            "VPC": {
+                "CIDR": "10.10.0.0/16"
+            },
+            "PublicA": {
+                "CIDR": "10.10.1.0/24"
+            },
+            "PublicB": {
+                "CIDR": "10.10.2.0/24"
+            },
+            "PublicC": {
+                "CIDR": "10.10.3.0/24"
+            }
+        },
+        "AWSInstanceType2NATArch": {
+            "t1.micro": {
+                "Arch": "NATPV64"
+            },
+            "t2.nano": {
+                "Arch": "NATHVM64"
+            },
+            "t2.micro": {
+                "Arch": "NATHVM64"
+            },
+            "t2.small": {
+                "Arch": "NATHVM64"
+            },
+            "t2.medium": {
+                "Arch": "NATHVM64"
+            },
+            "t2.large": {
+                "Arch": "NATHVM64"
+            },
+            "m1.small": {
+                "Arch": "NATPV64"
+            },
+            "m1.medium": {
+                "Arch": "NATPV64"
+            },
+            "m1.large": {
+                "Arch": "NATPV64"
+            },
+            "m1.xlarge": {
+                "Arch": "NATPV64"
+            },
+            "m2.xlarge": {
+                "Arch": "NATPV64"
+            },
+            "m2.2xlarge": {
+                "Arch": "NATPV64"
+            },
+            "m2.4xlarge": {
+                "Arch": "NATPV64"
+            },
+            "m3.medium": {
+                "Arch": "NATHVM64"
+            },
+            "m3.large": {
+                "Arch": "NATHVM64"
+            },
+            "m3.xlarge": {
+                "Arch": "NATHVM64"
+            },
+            "m3.2xlarge": {
+                "Arch": "NATHVM64"
+            },
+            "m4.large": {
+                "Arch": "NATHVM64"
+            },
+            "m4.xlarge": {
+                "Arch": "NATHVM64"
+            },
+            "m4.2xlarge": {
+                "Arch": "NATHVM64"
+            },
+            "m4.4xlarge": {
+                "Arch": "NATHVM64"
+            },
+            "m4.10xlarge": {
+                "Arch": "NATHVM64"
+            },
+            "c1.medium": {
+                "Arch": "NATPV64"
+            },
+            "c1.xlarge": {
+                "Arch": "NATPV64"
+            },
+            "c3.large": {
+                "Arch": "NATHVM64"
+            },
+            "c3.xlarge": {
+                "Arch": "NATHVM64"
+            },
+            "c3.2xlarge": {
+                "Arch": "NATHVM64"
+            },
+            "c3.4xlarge": {
+                "Arch": "NATHVM64"
+            },
+            "c3.8xlarge": {
+                "Arch": "NATHVM64"
+            },
+            "c4.large": {
+                "Arch": "NATHVM64"
+            },
+            "c4.xlarge": {
+                "Arch": "NATHVM64"
+            },
+            "c4.2xlarge": {
+                "Arch": "NATHVM64"
+            },
+            "c4.4xlarge": {
+                "Arch": "NATHVM64"
+            },
+            "c4.8xlarge": {
+                "Arch": "NATHVM64"
+            },
+            "g2.2xlarge": {
+                "Arch": "NATHVMG2"
+            },
+            "g2.8xlarge": {
+                "Arch": "NATHVMG2"
+            },
+            "r3.large": {
+                "Arch": "NATHVM64"
+            },
+            "r3.xlarge": {
+                "Arch": "NATHVM64"
+            },
+            "r3.2xlarge": {
+                "Arch": "NATHVM64"
+            },
+            "r3.4xlarge": {
+                "Arch": "NATHVM64"
+            },
+            "r3.8xlarge": {
+                "Arch": "NATHVM64"
+            },
+            "i2.xlarge": {
+                "Arch": "NATHVM64"
+            },
+            "i2.2xlarge": {
+                "Arch": "NATHVM64"
+            },
+            "i2.4xlarge": {
+                "Arch": "NATHVM64"
+            },
+            "i2.8xlarge": {
+                "Arch": "NATHVM64"
+            },
+            "d2.xlarge": {
+                "Arch": "NATHVM64"
+            },
+            "d2.2xlarge": {
+                "Arch": "NATHVM64"
+            },
+            "d2.4xlarge": {
+                "Arch": "NATHVM64"
+            },
+            "d2.8xlarge": {
+                "Arch": "NATHVM64"
+            },
+            "hi1.4xlarge": {
+                "Arch": "NATHVM64"
+            },
+            "hs1.8xlarge": {
+                "Arch": "NATHVM64"
+            },
+            "cr1.8xlarge": {
+                "Arch": "NATHVM64"
+            },
+            "cc2.8xlarge": {
+                "Arch": "NATHVM64"
+            }
+        },
+        "AWSRegionArch2AMI": {
+            "us-east-1": {
+                "PV64": "ami-2a69aa47",
+                "HVM64": "ami-97785bed",
+                "HVMG2": "ami-0a6e3770"
+            },
+            "us-west-2": {
+                "PV64": "ami-7f77b31f",
+                "HVM64": "ami-f2d3638a",
+                "HVMG2": "ami-ee15a196"
+            },
+            "us-west-1": {
+                "PV64": "ami-a2490dc2",
+                "HVM64": "ami-824c4ee2",
+                "HVMG2": "ami-0da4a46d"
+            },
+            "eu-west-1": {
+                "PV64": "ami-4cdd453f",
+                "HVM64": "ami-d834aba1",
+                "HVMG2": "ami-af8013d6"
+            },
+            "eu-west-2": {
+                "PV64": "NOT_SUPPORTED",
+                "HVM64": "ami-403e2524",
+                "HVMG2": "NOT_SUPPORTED"
+            },
+            "eu-west-3": {
+                "PV64": "NOT_SUPPORTED",
+                "HVM64": "ami-8ee056f3",
+                "HVMG2": "NOT_SUPPORTED"
+            },
+            "eu-central-1": {
+                "PV64": "ami-6527cf0a",
+                "HVM64": "ami-5652ce39",
+                "HVMG2": "ami-1d58ca72"
+            },
+            "ap-northeast-1": {
+                "PV64": "ami-3e42b65f",
+                "HVM64": "ami-ceafcba8",
+                "HVMG2": "ami-edfd658b"
+            },
+            "ap-northeast-2": {
+                "PV64": "NOT_SUPPORTED",
+                "HVM64": "ami-863090e8",
+                "HVMG2": "NOT_SUPPORTED"
+            },
+            "ap-northeast-3": {
+                "PV64": "NOT_SUPPORTED",
+                "HVM64": "ami-83444afe",
+                "HVMG2": "NOT_SUPPORTED"
+            },
+            "ap-southeast-1": {
+                "PV64": "ami-df9e4cbc",
+                "HVM64": "ami-68097514",
+                "HVMG2": "ami-c06013bc"
+            },
+            "ap-southeast-2": {
+                "PV64": "ami-63351d00",
+                "HVM64": "ami-942dd1f6",
+                "HVMG2": "ami-85ef12e7"
+            },
+            "ap-south-1": {
+                "PV64": "NOT_SUPPORTED",
+                "HVM64": "ami-531a4c3c",
+                "HVMG2": "ami-411e492e"
+            },
+            "us-east-2": {
+                "PV64": "NOT_SUPPORTED",
+                "HVM64": "ami-f63b1193",
+                "HVMG2": "NOT_SUPPORTED"
+            },
+            "ca-central-1": {
+                "PV64": "NOT_SUPPORTED",
+                "HVM64": "ami-a954d1cd",
+                "HVMG2": "NOT_SUPPORTED"
+            },
+            "sa-east-1": {
+                "PV64": "ami-1ad34676",
+                "HVM64": "ami-84175ae8",
+                "HVMG2": "NOT_SUPPORTED"
+            },
+            "cn-north-1": {
+                "PV64": "ami-77559f1a",
+                "HVM64": "ami-cb19c4a6",
+                "HVMG2": "NOT_SUPPORTED"
+            },
+            "cn-northwest-1": {
+                "PV64": "ami-80707be2",
+                "HVM64": "ami-3e60745c",
+                "HVMG2": "NOT_SUPPORTED"
+            }
+        }
+    },
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Resources": {
+        "Application": {
+            "DependsOn": "WebInstance",
+            "Type": "AWS::CodeDeploy::Application",
+            "Properties": {
+                "ApplicationName": {
+                    "Ref": "AWS::StackName"
+                }
+            }
+        },
+        "DeploymentConfig": {
+            "Type": "AWS::CodeDeploy::DeploymentConfig",
+            "Properties": {
+                "MinimumHealthyHosts": {
+                    "Type": "FLEET_PERCENT",
+                    "Value": "75"
+                }
+            }
+        },
+        "DeploymentGroup": {
+            "Type": "AWS::CodeDeploy::DeploymentGroup",
+            "Properties": {
+                "DeploymentGroupName": {
+                    "Fn::Join": [
+                        "",
+                        [
+                            {
+                                "Ref": "AWS::StackName"
+                            },
+                            "-DG"
+                        ]
+                    ]
+                },
+                "ApplicationName": {
+                    "Ref": "Application"
+                },
+                "Ec2TagFilters": [
+                    {
+                        "Key": "CDTag",
+                        "Value": {
+                            "Fn::Join": [
+                                "-",
+                                [
+                                    "RailsWeb",
+                                    {
+                                        "Ref": "AWS::StackName"
+                                    }
+                                ]
+                            ]
+                        },
+                        "Type": "KEY_AND_VALUE"
+                    }
+                ],
+                "ServiceRoleArn": {
+                    "Fn::GetAtt": [
+                        "CodeDeployTrustRole",
+                        "Arn"
+                    ]
+                }
+            }
+        },
+        "MyDBSubnetGroup": {
+            "Type": "AWS::RDS::DBSubnetGroup",
+            "Properties": {
+                "DBSubnetGroupDescription": "Subnets available for the RDS DB Instance",
+                "SubnetIds": [
+                    {
+                        "Ref": "PublicSubnetA"
+                    },
+                    {
+                        "Ref": "PublicSubnetB"
+                    },
+                    {
+                        "Ref": "PublicSubnetC"
+                    }
+                ]
+            }
+        },
+        "VPCDBSecurityGroup": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "GroupDescription": "Security group for RDS DB Instance.",
+                "VpcId": {
+                    "Ref": "VPC"
+                },
+                "SecurityGroupIngress": [
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "3306",
+                        "ToPort": "3306",
+                        "SourceSecurityGroupId": {
+                            "Ref": "WebServerSecurityGroup"
+                        }
+                    }
+                ]
+            }
+        },
+        "RDSDB": {
+            "Type": "AWS::RDS::DBInstance",
+            "Properties": {
+                "DBSnapshotIdentifier": "REPLACE WITH ARN OF RAILS RDS DB SNAPSHOT",
+                "AllocatedStorage": {
+                    "Ref": "RDSMYSQLStorage"
+                },
+                "DBInstanceClass": {
+                    "Ref": "RDSMYSQLInstanceClass"
+                },
+                "Engine": "MySQL",
+                "EngineVersion": "5.5",
+                "DBSubnetGroupName": {
+                    "Ref": "MyDBSubnetGroup"
+                },
+                "VPCSecurityGroups": [
+                    {
+                        "Ref": "VPCDBSecurityGroup"
+                    }
+                ],
+                "MasterUsername": {
+                    "Ref": "DBUser"
+                },
+                "MasterUserPassword": {
+                    "Ref": "DBPassword"
+                },
+                "MultiAZ": "false"
+            },
+            "DeletionPolicy": "Snapshot"
+        },
+        "FedoraRDSDB": {
+            "Type": "AWS::RDS::DBInstance",
+            "Properties": {
+                "DBSnapshotIdentifier": "REPLACE WITH ARN OF FEDORA RDS DB SNAPSHOT",
+                "AllocatedStorage": {
+                    "Ref": "FedoraRDSMYSQLStorage"
+                },
+                "DBInstanceClass": {
+                    "Ref": "FedoraRDSMYSQLInstanceClass"
+                },
+                "Engine": "MySQL",
+                "EngineVersion": "5.5",
+                "DBSubnetGroupName": {
+                    "Ref": "MyDBSubnetGroup"
+                },
+                "VPCSecurityGroups": [
+                    {
+                        "Ref": "VPCDBSecurityGroup"
+                    }
+                ],
+                "MasterUsername": {
+                    "Ref": "FedoraDBUser"
+                },
+                "MasterUserPassword": {
+                    "Ref": "FedoraDBPassword"
+                },
+                "MultiAZ": "false"
+            },
+            "DeletionPolicy": "Snapshot"
+        },
+        "CacheSubnetGroup": {
+            "Type": "AWS::ElastiCache::SubnetGroup",
+            "Properties": {
+                "Description": "Subnets available for the ElastiCache Cluster",
+                "SubnetIds": [
+                    {
+                        "Ref": "PublicSubnetA"
+                    },
+                    {
+                        "Ref": "PublicSubnetB"
+                    },
+                    {
+                        "Ref": "PublicSubnetC"
+                    }
+                ]
+            }
+        },
+        "CacheSecurityGroup": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "GroupDescription": "Allow access to the cache from the Web Server",
+                "VpcId": {
+                    "Ref": "VPC"
+                },
+                "SecurityGroupIngress": [
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "0",
+                        "ToPort": "65535",
+                        "SourceSecurityGroupId": {
+                            "Ref": "WebServerSecurityGroup"
+                        }
+                    }
+                ]
+            }
+        },
+        "RedisCluster": {
+            "Type": "AWS::ElastiCache::CacheCluster",
+            "Properties": {
+                "CacheSubnetGroupName": {
+                    "Ref": "CacheSubnetGroup"
+                },
+                "VpcSecurityGroupIds": [
+                    {
+                        "Ref": "CacheSecurityGroup"
+                    }
+                ],
+                "CacheNodeType": {
+                    "Ref": "RedisClusterNodeType"
+                },
+                "Engine": "redis",
+                "NumCacheNodes": "1"
+            }
+        },
+        "RedisClusterSecurityGroup": {
+            "Type": "AWS::ElastiCache::SecurityGroup",
+            "Properties": {
+                "Description": "Lock the cluster down"
+            }
+        },
+        "RedisClusterSecurityGroupIngress": {
+            "Type": "AWS::ElastiCache::SecurityGroupIngress",
+            "Properties": {
+                "CacheSecurityGroupName": {
+                    "Ref": "RedisClusterSecurityGroup"
+                },
+                "EC2SecurityGroupName": {
+                    "Ref": "WebServerSecurityGroup"
+                }
+            }
+        },
+        "DataInstance": {
+            "Type": "AWS::EC2::Instance",
+            "DependsOn": "FedoraRDSDB",
+            "Properties": {
+                "DisableApiTermination": "false",
+                "ImageId": "REPLACE WITH IMAGE ID OF AMI CREATED FROM SNAPSHOT OF DataInstance EC2 ROOT VOLUME",
+                "BlockDeviceMappings": [
+                    {
+                        "DeviceName": "/dev/xvda",
+                        "Ebs": {
+                            "DeleteOnTermination": "false",
+                            "VolumeSize": {
+                                "Ref": "DataInstanceVolumeSize"
+                            }
+                        }
+                    }
+                ],
+                "InstanceInitiatedShutdownBehavior": "stop",
+                "IamInstanceProfile": {
+                    "Ref": "InstanceRoleInstanceProfile"
+                },
+                "InstanceType": {
+                    "Ref": "DataInstanceType"
+                },
+                "NetworkInterfaces": [
+                    {
+                        "GroupSet": [
+                            {
+                                "Ref": "WebServerSecurityGroup"
+                            }
+                        ],
+                        "AssociatePublicIpAddress": "true",
+                        "DeviceIndex": "0",
+                        "DeleteOnTermination": "true",
+                        "SubnetId": {
+                            "Ref": "PublicSubnetA"
+                        }
+                    }
+                ],
+                "KeyName": {
+                    "Ref": "KeyName"
+                },
+                "Monitoring": "false",
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Fn::Join": [
+                                "-",
+                                [
+                                    {
+                                        "Ref": "AWS::StackName"
+                                    },
+                                    "-data"
+                                ]
+                            ]
+                        }
+                    }
+                ],
+                "UserData": {
+                    "Fn::Base64": {
+                        "Fn::Join": [
+                            "",
+                            [
+                                "#!/bin/bash\n",
+                                "\n",
+                                "yum -y update\n",
+                                "/opt/aws/bin/cfn-init -s ",
+                                {
+                                    "Ref": "AWS::StackId"
+                                },
+                                " -r DataInstance ",
+                                "    --region ",
+                                {
+                                    "Ref": "AWS::Region"
+                                },
+                                "\n",
+                                "#Install Java 8\n",
+                                "yum -y remove java-1.7.0-openjdk\n",
+                                "yum -y install java-1.8.0\n",
+                                "#Install mysql-devel\n",
+                                "yum -y install mysql-devel\n",
+                                "\n",
+                                "#Install Fedora\n",
+                                "yum -y install tomcat7\n",
+                                "echo 'JAVA_OPTS=\"${JAVA_OPTS} -Dfcrepo.home=/mnt/fedora-data\"' >> /etc/sysconfig/tomcat7\n",
+                                "mkdir /mnt/fedora-data\n",
+                                "chown tomcat:tomcat /mnt/fedora-data/\n",
+                                "wget https://github.com/fcrepo4/fcrepo4/releases/download/fcrepo-4.7.5/fcrepo-webapp-4.7.5.war\n",
+                                "cp fcrepo-webapp-4.7.5.war /var/lib/tomcat7/webapps/\n",
+                                "echo 'fcrepo.home=/mnt/fedora-data' >> /etc/tomcat7/catalina.properties\n",
+                                "echo 'fcrepo.mysql.host=", { "Fn::GetAtt": ["FedoraRDSDB", "Endpoint.Address" ] },"' >> /etc/tomcat7/catalina.properties\n",
+                                "echo 'fcrepo.mysql.username=", { "Ref": "FedoraDBUser" }, "' >> /etc/tomcat7/catalina.properties\n",
+                                "echo 'fcrepo.mysql.password=", { "Ref": "FedoraDBPassword" }, "' >> /etc/tomcat7/catalina.properties\n",
+                                "echo 'fcrepo.modeshape.configuration=file:/var/lib/tomcat7/webapps/fcrepo-webapp-4.7.5/WEB-INF/classes/config/jdbc-mysql/repository.json' >> /etc/tomcat7/catalina.properties\n",
+                                "service tomcat7 restart\n",
+                                "wget http://archive.apache.org/dist/lucene/solr/6.5.0/solr-6.5.0.tgz\n",
+                                "tar xzf solr-6.5.0.tgz solr-6.5.0/bin/install_solr_service.sh --strip-components=2\n",
+                                "./install_solr_service.sh solr-6.5.0.tgz\n",
+                                "\n",
+                                "mkdir /tmp/hyrax-config/\n",
+                                "aws s3 sync s3://hyrax-install-assets/solr-config/ /tmp/hyrax-config/\n",
+                                "\n",
+                                {
+                                    "Fn::Join": [
+                                        "",
+                                        [
+                                            "sudo -u solr /opt/solr/bin/solr create -c ",
+                                            {
+                                                "Ref": "SolrCoreName"
+                                            },
+                                            " -d /tmp/hyrax-config/\n"
+                                        ]
+                                    ]
+                                },
+                                "/opt/solr/bin/init.d/solr restart\n",
+                                "\n",
+                                "chkconfig tomcat7 on\n",
+                                "chkconfig solr on\n",
+                                "/opt/aws/bin/cfn-signal -e 0",
+                                "\n"
+                            ]
+                        ]
+                    }
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "5bde501a-b3bb-4c1c-9130-55aa7050350b"
+                }
+            }
+        },
+        "WebInstance": {
+            "Type": "AWS::EC2::Instance",
+            "DependsOn": "RDSDB",
+            "Properties": {
+                "BlockDeviceMappings": [
+                    {
+                        "DeviceName": "/dev/xvda",
+                        "Ebs": {
+                            "DeleteOnTermination": "false",
+                            "VolumeSize": {
+                                "Ref": "WebInstanceVolumeSize"
+                            }
+                        }
+                    }
+                ],
+                "DisableApiTermination": "false",
+                "InstanceInitiatedShutdownBehavior": "stop",
+                "IamInstanceProfile": {
+                    "Ref": "InstanceRoleInstanceProfile"
+                },
+                "ImageId": {
+                    "Fn::FindInMap": [
+                        "AWSRegionArch2AMI",
+                        {
+                            "Ref": "AWS::Region"
+                        },
+                        {
+                            "Fn::FindInMap": [
+                                "AWSInstanceType2Arch",
+                                {
+                                    "Ref": "WebInstanceType"
+                                },
+                                "Arch"
+                            ]
+                        }
+                    ]
+                },
+                "NetworkInterfaces": [
+                    {
+                        "GroupSet": [
+                            {
+                                "Ref": "WebServerSecurityGroup"
+                            }
+                        ],
+                        "AssociatePublicIpAddress": "true",
+                        "DeviceIndex": "0",
+                        "DeleteOnTermination": "true",
+                        "SubnetId": {
+                            "Ref": "PublicSubnetA"
+                        }
+                    }
+                ],
+                "InstanceType": {
+                    "Ref": "DataInstanceType"
+                },
+                "KeyName": {
+                    "Ref": "KeyName"
+                },
+                "Monitoring": "false",
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Fn::Join": [
+                                "-",
+                                [
+                                    {
+                                        "Ref": "AWS::StackName"
+                                    },
+                                    "-web"
+                                ]
+                            ]
+                        }
+                    },
+                    {
+                        "Key": "CDTag",
+                        "Value": {
+                            "Fn::Join": [
+                                "-",
+                                [
+                                    "RailsWeb",
+                                    {
+                                        "Ref": "AWS::StackName"
+                                    }
+                                ]
+                            ]
+                        }
+                    }
+                ],
+                "UserData": {
+                    "Fn::Base64": {
+                        "Fn::Join": [
+                            "",
+                            [
+                                "#!/bin/bash\n",
+                                "\n",
+                                "yum -y update\n",
+                                "yum update -y aws-cfn-bootstrap\n",
+                                "/opt/aws/bin/cfn-init -s ",
+                                {
+                                    "Ref": "AWS::StackId"
+                                },
+                                " -r WebInstance ",
+                                "    --region ",
+                                {
+                                    "Ref": "AWS::Region"
+                                },
+                                "\n",
+                                "#Install ruby & rails\n",
+                                "su - ec2-user -c 'curl -sSL https://get.rvm.io | bash'\n",
+                                "su - ec2-user -c 'source ~/.bash_profile'\n",
+                                "su - ec2-user -c 'rvm install ", { "Ref": "RubyVersion" }, "'\n",
+                                "su - ec2-user -c 'rvm --default use ", { "Ref": "RubyVersion" }, "'\n",
+                                "#Install mysql-devel\n",
+                                "yum -y install mysql-devel\n",
+                                "#Install git\n",
+                                "yum -y install git\n",
+                                "#Install Java 8\n",
+                                "yum -y remove java-1.7.0-openjdk\n",
+                                "yum -y install java-1.8.0\n",
+                                "#Install ImageMagick\n",
+                                "yum -y install openjpeg-libs\n",
+                                "yum -y install ImageMagick\n",
+                                "#Install Node\n",
+                                "curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.6/install.sh | NVM_DIR=/usr/local/nvm bash\n",
+                                ". /usr/local/nvm/nvm.sh\n",
+                                "nvm install 12.9.0\n",
+                                "echo 'export NVM_DIR=\"/usr/local/nvm\"' >> /etc/profile\n",
+                                "echo '[ -s \"$NVM_DIR/nvm.sh\" ] && \\. \"$NVM_DIR/nvm.sh\"  # This loads nvm' >> /etc/profile\n",
+                                "echo '[ -s \"$NVM_DIR/bash_completion\" ] && \\. \"$NVM_DIR/bash_completion\"  # This loads nvm bash_completion' >> /etc/profile\n",
+                                "# Install FFMPEG\n",
+                                "cd /usr/local/bin\n",
+                                "mkdir ffmpeg\n",
+                                "cd ffmpeg\n",
+                                "wget https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-64bit-static.tar.xz\n",
+                                "tar xvf ffmpeg-release-64bit-static.tar.xz --strip 1\n",
+                                "ln -s /usr/local/bin/ffmpeg/ffmpeg /usr/bin/ffmpeg\n",
+                                "# Install LibreOffice\n",
+                                "#install dependencies\n",
+                                "yum -y install libGLU\n",
+                                "yum -y install libXinerama\n",
+                                "yum -y install dbus-glib bind-utils\n",
+                                "wget http://download.documentfoundation.org/libreoffice/stable/6.0.1/rpm/x86_64/LibreOffice_6.0.1_Linux_x86-64_rpm.tar.gz\n",
+                                "tar xvfz LibreOffice_6.0.1_Linux_x86-64_rpm.tar.gz\n",
+                                "cd LibreOffice_6.0.1.1_Linux_x86-64_rpm/RPMS/\n",
+                                "rm -rf libobasis6.0-gnome-*.rpm\n",
+                                "yum -y localinstall *.rpm\n",
+                                "ln -s /opt/libreoffice6.0/program/soffice /usr/bin/soffice\n",
+                                "#Install Fits\n",
+                                "wget http://projects.iq.harvard.edu/files/fits/files/fits-1.0.5.zip\n",
+                                "unzip fits-1.0.5.zip -d /opt\n",
+                                "chmod 755 /opt/fits-1.0.5/fits.sh\n",
+                                "chown -R ec2-user:ec2-user /opt/fits-1.0.5\n",
+                                "echo 'export PATH=$PATH:/opt/fits-1.0.5/' >> /etc/profile\n",
+                                "#Install Apache\n",
+                                "yum install -y curl-devel nano sqlite-devel libyaml-devel   \n",
+                                "yum install -y httpd24 httpd24-devel\n",
+                                "su - ec2-user -c 'gem install passenger'\n",
+                                "su - ec2-user -c 'passenger-install-apache2-module --auto'\n",
+                                "su - ec2-user -c 'passenger-install-apache2-module --snippet > /tmp/passenger.conf'\n",
+                                "mv /tmp/passenger.conf /etc/httpd/conf.d/passenger.conf\n",
+                                "#Install Yarn\n",
+                                "su - ec2-user -c 'curl -o- -L https://yarnpkg.com/install.sh | bash'\n",
+                                "echo '\n",
+                                {
+                                    "Fn::Sub": [
+                                        "export RAILS_ENV=${RAILS_ENV}\n",
+                                        {
+                                            "RAILS_ENV": {
+                                                "Ref": "Environment"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "Fn::Sub": [
+                                        "export DB_HOST=${DB_HOST}\n",
+                                        {
+                                            "DB_HOST": {
+                                                "Fn::GetAtt": [
+                                                    "RDSDB",
+                                                    "Endpoint.Address"
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "Fn::Sub": [
+                                        "export DB_NAME=${DB_NAME}\n",
+                                        {
+                                            "DB_NAME": {
+                                                "Ref": "DBName"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "Fn::Sub": [
+                                        "export DB_USER=${DB_USER}\n",
+                                        {
+                                            "DB_USER": {
+                                                "Ref": "DBUser"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "Fn::Sub": [
+                                        "export DB_PWD=${DB_PWD}\n",
+                                        {
+                                            "DB_PWD": {
+                                                "Ref": "DBPassword"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "Fn::Sub": [
+                                        "export FEDORA_DB_HOST=${FEDORA_DB_HOST}\n",
+                                        {
+                                            "FEDORA_DB_HOST": {
+                                                "Fn::GetAtt": [
+                                                    "FedoraRDSDB",
+                                                    "Endpoint.Address"
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "Fn::Sub": [
+                                        "export FEDORA_DB_USER=${FEDORA_DB_USER}\n",
+                                        {
+                                            "FEDORA_DB_USER": {
+                                                "Ref": "FedoraDBUser"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "Fn::Sub": [
+                                        "export FEDORA_DB_PWD=${FEDORA_DB_PWD}\n",
+                                        {
+                                            "FEDORA_DB_PWD": {
+                                                "Ref": "FedoraDBPassword"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "Fn::Sub": [
+                                        "export SOLR_URL=${SOLR_URL}\n",
+                                        {
+                                            "SOLR_URL": {
+                                                "Fn::Join": [
+                                                    "",
+                                                    [
+                                                        "\"",
+                                                        "http://",
+                                                        {
+                                                            "Fn::GetAtt": [
+                                                                "DataInstance",
+                                                                "PublicDnsName"
+                                                            ]
+                                                        },
+                                                        ":8983/solr/",
+                                                        {
+                                                            "Ref": "SolrCoreName"
+                                                        },
+                                                        "\""
+                                                    ]
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "Fn::Sub": [
+                                        "export FCREPO_URL=${FCREPO_URL}\n",
+                                        {
+                                            "FCREPO_URL": {
+                                                "Fn::Join": [
+                                                    "",
+                                                    [
+                                                        "\"",
+                                                        "http://",
+                                                        {
+                                                            "Fn::GetAtt": [
+                                                                "DataInstance",
+                                                                "PublicDnsName"
+                                                            ]
+                                                        },
+                                                        ":8080/fcrepo-webapp-4.7.5/rest",
+                                                        "\""
+                                                    ]
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "Fn::Sub": [
+                                        "export REDIS_SERVER=${REDIS_SERVER}\n",
+                                        {
+                                            "REDIS_SERVER": {
+                                                "Fn::GetAtt": [
+                                                    "RedisCluster",
+                                                    "RedisEndpoint.Address"
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                "' >> /etc/profile\n",
+                                "echo '\n",
+                                "<VirtualHost _default_:*>\n",
+                                "    ServerName ams.wgbh.org\n",
+                                "\n",
+                                "    # Tell Apache and Passenger where your apps public directory is\n",
+                                "    DocumentRoot /var/www/ams/public\n",
+                                "\n",
+                                "    # Relax Apache security settings\n",
+                                "    <Directory /var/www/ams/public>\n",
+                                "      Allow from all\n",
+                                "      Options -MultiViews\n",
+                                "      # Uncomment this if you are on Apache > 2.4:\n",
+                                "      Require all granted\n",
+                                "    </Directory>\n",
+                                "</VirtualHost>' > /etc/httpd/conf.d/ams.conf\n",
+                                "\n",
+                                "\n",
+                                "#Configure Apache\n",
+                                "usermod -a -G apache ec2-user\n",
+                                "service httpd restart\n",
+                                "\n",
+                                "chkconfig httpd on\n",
+                                "\n",
+                                "#Install code deploy\n",
+                                "mkdir /tmp/codedeploy\n",
+                                "cd /tmp/codedeploy\n",
+                                "wget http://aws-codedeploy-us-east-2.s3.amazonaws.com/latest/install\n",
+                                "chmod +x ./install\n",
+                                "./install auto\n",
+                                "service codedeploy-agent start\n",
+                                "\n",
+                                "\n",
+                                {
+                                    "Fn::Join": [
+                                        "",
+                                        [
+                                            "echo -e '",
+                                            {
+                                                "Fn::GetAtt": [
+                                                    "DataInstance",
+                                                    "PrivateIp"
+                                                ]
+                                            },
+                                            " SOLR' >> /etc/hosts\n"
+                                        ]
+                                    ]
+                                },
+                                {
+                                    "Fn::Join": [
+                                        "",
+                                        [
+                                            "echo -e '",
+                                            {
+                                                "Fn::GetAtt": [
+                                                    "DataInstance",
+                                                    "PrivateIp"
+                                                ]
+                                            },
+                                            " FEDORA' >> /etc/hosts\n"
+                                        ]
+                                    ]
+                                },
+                                {
+                                    "Fn::Join": [
+                                        "",
+                                        [
+                                            "echo -e \"`dig +short ",
+                                            {
+                                                "Fn::GetAtt": [
+                                                    "RedisCluster",
+                                                    "RedisEndpoint.Address"
+                                                ]
+                                            },
+                                            "`  REDIS\" >> /etc/hosts\n"
+                                        ]
+                                    ]
+                                },
+                                {
+                                    "Fn::Join": [
+                                        "",
+                                        [
+                                            "echo -e \"`dig +short ",
+                                            {
+                                                "Fn::GetAtt": [
+                                                    "RDSDB",
+                                                    "Endpoint.Address"
+                                                ]
+                                            },
+                                            "`  DB\" >> /etc/hosts\n"
+                                        ]
+                                    ]
+                                },
+                                "# Signal the status from cfn-init\n",
+                                "/opt/aws/bin/cfn-signal -e 0 ",
+                                "         --stack ",
+                                {
+                                    "Ref": "AWS::StackName"
+                                },
+                                "         --resource WebInstance ",
+                                "         --region ",
+                                {
+                                    "Ref": "AWS::Region"
+                                },
+                                "\n"
+                            ]
+                        ]
+                    }
+                }
+            },
+            "CreationPolicy": {
+                "ResourceSignal": {
+                    "Timeout": "PT20M"
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "8ed0b78c-949f-4b4f-89ea-5937f402ec58"
+                }
+            }
+        },
+        "VPC": {
+            "Type": "AWS::EC2::VPC",
+            "Properties": {
+                "EnableDnsSupport": "true",
+                "EnableDnsHostnames": "true",
+                "CidrBlock": {
+                    "Fn::FindInMap": [
+                        "SubnetConfig",
+                        "VPC",
+                        "CIDR"
+                    ]
+                },
+                "Tags": [
+                    {
+                        "Key": "Application",
+                        "Value": {
+                            "Ref": "AWS::StackName"
+                        }
+                    },
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Ref": "AWS::StackName"
+                        }
+                    },
+                    {
+                        "Key": "Network",
+                        "Value": "Public"
+                    }
+                ]
+            }
+        },
+        "PublicSubnetA": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "VPC"
+                },
+                "AvailabilityZone": "us-east-1a",
+                "CidrBlock": {
+                    "Fn::FindInMap": [
+                        "SubnetConfig",
+                        "PublicA",
+                        "CIDR"
+                    ]
+                },
+                "Tags": [
+                    {
+                        "Key": "Application",
+                        "Value": {
+                            "Ref": "AWS::StackName"
+                        }
+                    },
+                    {
+                        "Key": "Network",
+                        "Value": "Public"
+                    }
+                ]
+            }
+        },
+        "PublicSubnetB": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "VPC"
+                },
+                "AvailabilityZone": "us-east-1b",
+                "CidrBlock": {
+                    "Fn::FindInMap": [
+                        "SubnetConfig",
+                        "PublicB",
+                        "CIDR"
+                    ]
+                },
+                "Tags": [
+                    {
+                        "Key": "Application",
+                        "Value": {
+                            "Ref": "AWS::StackName"
+                        }
+                    },
+                    {
+                        "Key": "Network",
+                        "Value": "Public"
+                    }
+                ]
+            }
+        },
+        "PublicSubnetC": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "VPC"
+                },
+                "AvailabilityZone": "us-east-1c",
+                "CidrBlock": {
+                    "Fn::FindInMap": [
+                        "SubnetConfig",
+                        "PublicC",
+                        "CIDR"
+                    ]
+                },
+                "Tags": [
+                    {
+                        "Key": "Application",
+                        "Value": {
+                            "Ref": "AWS::StackName"
+                        }
+                    },
+                    {
+                        "Key": "Network",
+                        "Value": "Public"
+                    }
+                ]
+            }
+        },
+        "InternetGateway": {
+            "Type": "AWS::EC2::InternetGateway",
+            "Properties": {
+                "Tags": [
+                    {
+                        "Key": "Application",
+                        "Value": {
+                            "Ref": "AWS::StackName"
+                        }
+                    },
+                    {
+                        "Key": "Network",
+                        "Value": "Public"
+                    }
+                ]
+            }
+        },
+        "GatewayToInternet": {
+            "Type": "AWS::EC2::VPCGatewayAttachment",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "VPC"
+                },
+                "InternetGatewayId": {
+                    "Ref": "InternetGateway"
+                }
+            }
+        },
+        "PublicRouteTable": {
+            "Type": "AWS::EC2::RouteTable",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "VPC"
+                },
+                "Tags": [
+                    {
+                        "Key": "Application",
+                        "Value": {
+                            "Ref": "AWS::StackName"
+                        }
+                    },
+                    {
+                        "Key": "Network",
+                        "Value": "Public"
+                    }
+                ]
+            }
+        },
+        "PublicRoute": {
+            "Type": "AWS::EC2::Route",
+            "DependsOn": "GatewayToInternet",
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "PublicRouteTable"
+                },
+                "DestinationCidrBlock": "0.0.0.0/0",
+                "GatewayId": {
+                    "Ref": "InternetGateway"
+                }
+            }
+        },
+        "PublicSubnetARouteTableAssociation": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties": {
+                "SubnetId": {
+                    "Ref": "PublicSubnetA"
+                },
+                "RouteTableId": {
+                    "Ref": "PublicRouteTable"
+                }
+            }
+        },
+        "PublicSubnetBRouteTableAssociation": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties": {
+                "SubnetId": {
+                    "Ref": "PublicSubnetB"
+                },
+                "RouteTableId": {
+                    "Ref": "PublicRouteTable"
+                }
+            }
+        },
+        "PublicSubnetCRouteTableAssociation": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties": {
+                "SubnetId": {
+                    "Ref": "PublicSubnetC"
+                },
+                "RouteTableId": {
+                    "Ref": "PublicRouteTable"
+                }
+            }
+        },
+        "PublicNetworkAcl": {
+            "Type": "AWS::EC2::NetworkAcl",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "VPC"
+                },
+                "Tags": [
+                    {
+                        "Key": "Application",
+                        "Value": {
+                            "Ref": "AWS::StackName"
+                        }
+                    },
+                    {
+                        "Key": "Network",
+                        "Value": "Public"
+                    }
+                ]
+            }
+        },
+        "InboundPublicNetworkAclEntry": {
+            "Type": "AWS::EC2::NetworkAclEntry",
+            "Properties": {
+                "NetworkAclId": {
+                    "Ref": "PublicNetworkAcl"
+                },
+                "RuleNumber": "100",
+                "Protocol": "6",
+                "RuleAction": "allow",
+                "Egress": "false",
+                "CidrBlock": "0.0.0.0/0",
+                "PortRange": {
+                    "From": "0",
+                    "To": "65535"
+                }
+            }
+        },
+        "OutboundPublicNetworkAclEntry": {
+            "Type": "AWS::EC2::NetworkAclEntry",
+            "Properties": {
+                "NetworkAclId": {
+                    "Ref": "PublicNetworkAcl"
+                },
+                "RuleNumber": "100",
+                "Protocol": "6",
+                "RuleAction": "allow",
+                "Egress": "true",
+                "CidrBlock": "0.0.0.0/0",
+                "PortRange": {
+                    "From": "0",
+                    "To": "65535"
+                }
+            }
+        },
+        "PublicSubnetANetworkAclAssociation": {
+            "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+            "Properties": {
+                "SubnetId": {
+                    "Ref": "PublicSubnetA"
+                },
+                "NetworkAclId": {
+                    "Ref": "PublicNetworkAcl"
+                }
+            }
+        },
+        "PublicSubnetBNetworkAclAssociation": {
+            "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+            "Properties": {
+                "SubnetId": {
+                    "Ref": "PublicSubnetB"
+                },
+                "NetworkAclId": {
+                    "Ref": "PublicNetworkAcl"
+                }
+            }
+        },
+        "PublicSubnetCNetworkAclAssociation": {
+            "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+            "Properties": {
+                "SubnetId": {
+                    "Ref": "PublicSubnetC"
+                },
+                "NetworkAclId": {
+                    "Ref": "PublicNetworkAcl"
+                }
+            }
+        },
+        "WebServerSecurityGroup": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "GroupDescription": "HyraxApp",
+                "VpcId": {
+                    "Ref": "VPC"
+                },
+                "SecurityGroupIngress": [
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "80",
+                        "ToPort": "80",
+                        "CidrIp": "0.0.0.0/0"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "22",
+                        "ToPort": "22",
+                        "CidrIp": {
+                            "Ref": "SSHLocation"
+                        }
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "22",
+                        "ToPort": "22",
+                        "CidrIp": "0.0.0.0/0"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "8080",
+                        "ToPort": "8080",
+                        "CidrIp": "0.0.0.0/0"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "8983",
+                        "ToPort": "8983",
+                        "CidrIp": "0.0.0.0/0"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "3000",
+                        "ToPort": "3000",
+                        "CidrIp": "0.0.0.0/0"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "7983",
+                        "ToPort": "7983",
+                        "CidrIp": "0.0.0.0/0"
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "303ed82f-f15d-4111-9a37-2420bd571b42"
+                }
+            }
+        },
+        "CodeDeployTrustRole": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+                "AssumeRolePolicyDocument": {
+                    "Statement": [
+                        {
+                            "Sid": "1",
+                            "Effect": "Allow",
+                            "Principal": {
+                                "Service": [
+                                    "codedeploy.us-east-1.amazonaws.com",
+                                    "codedeploy.us-west-2.amazonaws.com"
+                                ]
+                            },
+                            "Action": "sts:AssumeRole"
+                        }
+                    ]
+                },
+                "Path": "/"
+            }
+        },
+        "CodeDeployRolePolicies": {
+            "Type": "AWS::IAM::Policy",
+            "Properties": {
+                "PolicyName": "CodeDeployPolicy",
+                "PolicyDocument": {
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Resource": [
+                                "*"
+                            ],
+                            "Action": [
+                                "ec2:Describe*"
+                            ]
+                        },
+                        {
+                            "Effect": "Allow",
+                            "Resource": [
+                                "*"
+                            ],
+                            "Action": [
+                                "autoscaling:CompleteLifecycleAction",
+                                "autoscaling:DeleteLifecycleHook",
+                                "autoscaling:DescribeLifecycleHooks",
+                                "autoscaling:DescribeAutoScalingGroups",
+                                "autoscaling:PutLifecycleHook",
+                                "autoscaling:RecordLifecycleActionHeartbeat"
+                            ]
+                        }
+                    ]
+                },
+                "Roles": [
+                    {
+                        "Ref": "CodeDeployTrustRole"
+                    }
+                ]
+            }
+        },
+        "InstanceRole": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+                "AssumeRolePolicyDocument": {
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Principal": {
+                                "Service": [
+                                    "ec2.amazonaws.com"
+                                ]
+                            },
+                            "Action": [
+                                "sts:AssumeRole"
+                            ]
+                        }
+                    ]
+                },
+                "Path": "/"
+            }
+        },
+        "InstanceRolePolicies": {
+            "Type": "AWS::IAM::Policy",
+            "Properties": {
+                "PolicyName": "InstanceRole",
+                "PolicyDocument": {
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Action": [
+                                "autoscaling:Describe*",
+                                "cloudformation:Describe*",
+                                "cloudformation:GetTemplate",
+                                "s3:Get*"
+                            ],
+                            "Resource": "*"
+                        }
+                    ]
+                },
+                "Roles": [
+                    {
+                        "Ref": "InstanceRole"
+                    }
+                ]
+            }
+        },
+        "InstanceRoleInstanceProfile": {
+            "Type": "AWS::IAM::InstanceProfile",
+            "Properties": {
+                "Path": "/",
+                "Roles": [
+                    {
+                        "Ref": "InstanceRole"
+                    }
+                ]
+            }
+        }
+    },
+    "Metadata": {
+        "AWS::CloudFormation::Designer": {
+            "303ed82f-f15d-4111-9a37-2420bd571b42": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 60,
+                    "y": 90
+                },
+                "z": 1,
+                "embeds": []
+            },
+            "8ed0b78c-949f-4b4f-89ea-5937f402ec58": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 180,
+                    "y": 90
+                },
+                "z": 1,
+                "embeds": [],
+                "isassociatedwith": [
+                    "303ed82f-f15d-4111-9a37-2420bd571b42"
+                ]
+            },
+            "5bde501a-b3bb-4c1c-9130-55aa7050350b": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 60,
+                    "y": 210
+                },
+                "z": 1,
+                "embeds": [],
+                "isassociatedwith": [
+                    "303ed82f-f15d-4111-9a37-2420bd571b42"
+                ]
+            }
+        }
+    },
+    "Outputs": {
+        "WebsiteURL": {
+            "Value": {
+                "Fn::Join": [
+                    "",
+                    [
+                        "http://",
+                        {
+                            "Fn::GetAtt": [
+                                "WebInstance",
+                                "PublicDnsName"
+                            ]
+                        },
+                        "/"
+                    ]
+                ]
+            },
+            "Description": "URL for newly created Rails application"
+        },
+        "SolrURL": {
+            "Value": {
+                "Fn::Join": [
+                    "",
+                    [
+                        "http://",
+                        {
+                            "Fn::GetAtt": [
+                                "DataInstance",
+                                "PublicDnsName"
+                            ]
+                        },
+                        ":8983/solr/",
+                        {
+                            "Ref": "SolrCoreName"
+                        }
+                    ]
+                ]
+            },
+            "Description": "URL for solr index"
+        },
+        "Fedora": {
+            "Value": {
+                "Fn::Join": [
+                    "",
+                    [
+                        "http://",
+                        {
+                            "Fn::GetAtt": [
+                                "DataInstance",
+                                "PublicDnsName"
+                            ]
+                        },
+                        ":8080/fcrepo-webapp-4.7.5/rest"
+                    ]
+                ]
+            },
+            "Description": "URL for fedora Repo"
+        },
+        "Redis": {
+            "Value": {
+                "Fn::Join": [
+                    "",
+                    [
+                        "Cluster Endpoint: redis://",
+                        {
+                            "Fn::GetAtt": [
+                                "RedisCluster",
+                                "RedisEndpoint.Address"
+                            ]
+                        },
+                        ":",
+                        {
+                            "Fn::GetAtt": [
+                                "RedisCluster",
+                                "RedisEndpoint.Port"
+                            ]
+                        }
+                    ]
+                ]
+            },
+            "Description": "Redis"
+        },
+        "DB": {
+            "Value": {
+                "Fn::Join": [
+                    "",
+                    [
+                        "Database Endpoint: mysql://",
+                        {
+                            "Fn::GetAtt": [
+                                "RDSDB",
+                                "Endpoint.Address"
+                            ]
+                        },
+                        ":",
+                        {
+                            "Fn::GetAtt": [
+                                "RDSDB",
+                                "Endpoint.Port"
+                            ]
+                        }
+                    ]
+                ]
+            },
+            "Description": "mySQL Database"
+        }
+    }
+}
