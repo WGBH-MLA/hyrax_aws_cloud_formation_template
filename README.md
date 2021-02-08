@@ -28,6 +28,7 @@ running the AMS web app.
    step 1, and then click "Next".
 1. Enter a **Stack Name**, enter values for the parameters:
    1. All password fields are required.
+   1. ServerName is used for enabling HTTPS and should match the site's domain for verification. If not enabling HTTPS, the default value is fine.
    1. All other default values should work, but you can adjust them as needed.
    1. Click "Next" when finished.
 1. For the "Configure stack options" and "Advanced options", defaults will
@@ -101,6 +102,7 @@ to the point-in-time that the snapshots were taken.
    step 1, and then click "Next".
 1. Enter a **Stack Name**, enter values for the parameters:
    1. All password fields are required.
+   1. ServerName is used for enabling HTTPS and should match the site's domain for verification. If not enabling HTTPS, the default value is fine.
    1. All other default values should work, but you can adjust them as needed.
    1. Click "Next" when finished.
 1. For the "Configure stack options" and "Advanced options", defaults will
@@ -135,3 +137,13 @@ to the point-in-time that the snapshots were taken.
          may change, so be sure to consult with developers if you are unsure
          which branch/commit represents the latest code.
       1. Add an optional description.
+
+### SSL
+
+The Cloudformation template includes setup that prepares the AMS web server for encryption with Certbot. As you are creating a new stack or restoring from the old do the following:
+
+1. As you are setting the Parameters when launching a stack from a Cloudformation template, set the ServerName so that it matches the domain of your site.
+1. Creating the stack via the Cloudformation template.
+1. Deploy the code via CodeDeploy.
+1. SSH to the web server.
+1. Run `sudo certbot` to get the certificate.
