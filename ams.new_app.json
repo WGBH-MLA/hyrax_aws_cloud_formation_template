@@ -56,20 +56,6 @@
             ],
             "ConstraintDescription": "must select a valid Redis Cache Node type."
         },
-        "RDSMYSQLInstanceClass": {
-            "Default": "db.t2.small",
-            "Description": "The database instance type",
-            "Type": "String",
-            "AllowedValues": [
-                "db.t2.small",
-                "db.t2.medium",
-                "db.m1.small",
-                "db.m1.large",
-                "db.m4.xlarge",
-                "db.m4.4xlarge",
-            ],
-            "ConstraintDescription": "must contain only alphanumeric characters."
-        },
         "RDSMYSQLStorage": {
             "Default": "20",
             "Description": "The size of the database (Gb)",
@@ -103,21 +89,6 @@
             "MinLength": "1",
             "MaxLength": "41",
             "AllowedPattern": "[a-zA-Z0-9]*",
-            "ConstraintDescription": "must contain only alphanumeric characters."
-        },
-        "FedoraRDSMYSQLInstanceClass": {
-            "Default": "db.t2.small",
-            "Description": "The Fedora database instance type",
-            "Type": "String",
-            "AllowedValues": [
-                "db.t2.small",
-                "db.t2.medium",
-                "db.m1.small",
-                "db.m4.large",
-                "db.m4.xlarge",
-                "db.m4.2xlarge",
-                "db.m4.4xlarge"
-            ],
             "ConstraintDescription": "must contain only alphanumeric characters."
         },
         "FedoraRDSMYSQLStorage": {
@@ -154,136 +125,12 @@
             "MaxLength": "41",
             "ConstraintDescription": "must contain only alphanumeric characters, underscores, or dashes."
         },
-        "WebInstanceType": {
-            "Description": "WebServer EC2 instance type",
-            "Type": "String",
-            "Default": "t2.medium",
-            "AllowedValues": [
-                "t1.micro",
-                "t2.nano",
-                "t2.micro",
-                "t2.small",
-                "t2.medium",
-                "t2.large",
-                "m1.small",
-                "m1.medium",
-                "m1.large",
-                "m1.xlarge",
-                "m2.xlarge",
-                "m2.2xlarge",
-                "m2.4xlarge",
-                "m3.medium",
-                "m3.large",
-                "m3.xlarge",
-                "m3.2xlarge",
-                "m4.large",
-                "m4.xlarge",
-                "m4.2xlarge",
-                "m4.4xlarge",
-                "m4.10xlarge",
-                "c1.medium",
-                "c1.xlarge",
-                "c3.large",
-                "c3.xlarge",
-                "c3.2xlarge",
-                "c3.4xlarge",
-                "c3.8xlarge",
-                "c4.large",
-                "c4.xlarge",
-                "c4.2xlarge",
-                "c4.4xlarge",
-                "c4.8xlarge",
-                "g2.2xlarge",
-                "g2.8xlarge",
-                "r3.large",
-                "r3.xlarge",
-                "r3.2xlarge",
-                "r3.4xlarge",
-                "r3.8xlarge",
-                "i2.xlarge",
-                "i2.2xlarge",
-                "i2.4xlarge",
-                "i2.8xlarge",
-                "d2.xlarge",
-                "d2.2xlarge",
-                "d2.4xlarge",
-                "d2.8xlarge",
-                "hi1.4xlarge",
-                "hs1.8xlarge",
-                "cr1.8xlarge",
-                "cc2.8xlarge",
-                "cg1.4xlarge"
-            ],
-            "ConstraintDescription": "must be a valid EC2 instance type."
-        },
         "WebInstanceVolumeSize": {
             "Description": "Size of the EBS volume if attached",
             "Type": "Number",
             "Default": "8",
             "MinValue": "1",
             "MaxValue": "1000"
-        },
-        "DataInstanceType": {
-            "Description": "Data EC2 instance type",
-            "Type": "String",
-            "Default": "t2.medium",
-            "AllowedValues": [
-                "t1.micro",
-                "t2.nano",
-                "t2.micro",
-                "t2.small",
-                "t2.medium",
-                "t2.large",
-                "m1.small",
-                "m1.medium",
-                "m1.large",
-                "m1.xlarge",
-                "m2.xlarge",
-                "m2.2xlarge",
-                "m2.4xlarge",
-                "m3.medium",
-                "m3.large",
-                "m3.xlarge",
-                "m3.2xlarge",
-                "m4.large",
-                "m4.xlarge",
-                "m4.2xlarge",
-                "m4.4xlarge",
-                "m4.10xlarge",
-                "c1.medium",
-                "c1.xlarge",
-                "c3.large",
-                "c3.xlarge",
-                "c3.2xlarge",
-                "c3.4xlarge",
-                "c3.8xlarge",
-                "c4.large",
-                "c4.xlarge",
-                "c4.2xlarge",
-                "c4.4xlarge",
-                "c4.8xlarge",
-                "g2.2xlarge",
-                "g2.8xlarge",
-                "r3.large",
-                "r3.xlarge",
-                "r3.2xlarge",
-                "r3.4xlarge",
-                "r3.8xlarge",
-                "i2.xlarge",
-                "i2.2xlarge",
-                "i2.4xlarge",
-                "i2.8xlarge",
-                "d2.xlarge",
-                "d2.2xlarge",
-                "d2.4xlarge",
-                "d2.8xlarge",
-                "hi1.4xlarge",
-                "hs1.8xlarge",
-                "cr1.8xlarge",
-                "cc2.8xlarge",
-                "cg1.4xlarge"
-            ],
-            "ConstraintDescription": "must be a valid EC2 instance type."
         },
         "DataInstanceVolumeSize": {
             "Description": "Size of the EBS volume if attached",
@@ -308,167 +155,6 @@
         },
     },
     "Mappings": {
-        "AWSInstanceType2Arch": {
-            "t1.micro": {
-                "Arch": "PV64"
-            },
-            "t2.nano": {
-                "Arch": "HVM64"
-            },
-            "t2.micro": {
-                "Arch": "HVM64"
-            },
-            "t2.small": {
-                "Arch": "HVM64"
-            },
-            "t2.medium": {
-                "Arch": "HVM64"
-            },
-            "t2.large": {
-                "Arch": "HVM64"
-            },
-            "m1.small": {
-                "Arch": "PV64"
-            },
-            "m1.medium": {
-                "Arch": "PV64"
-            },
-            "m1.large": {
-                "Arch": "PV64"
-            },
-            "m1.xlarge": {
-                "Arch": "PV64"
-            },
-            "m2.xlarge": {
-                "Arch": "PV64"
-            },
-            "m2.2xlarge": {
-                "Arch": "PV64"
-            },
-            "m2.4xlarge": {
-                "Arch": "PV64"
-            },
-            "m3.medium": {
-                "Arch": "HVM64"
-            },
-            "m3.large": {
-                "Arch": "HVM64"
-            },
-            "m3.xlarge": {
-                "Arch": "HVM64"
-            },
-            "m3.2xlarge": {
-                "Arch": "HVM64"
-            },
-            "m4.large": {
-                "Arch": "HVM64"
-            },
-            "m4.xlarge": {
-                "Arch": "HVM64"
-            },
-            "m4.2xlarge": {
-                "Arch": "HVM64"
-            },
-            "m4.4xlarge": {
-                "Arch": "HVM64"
-            },
-            "m4.10xlarge": {
-                "Arch": "HVM64"
-            },
-            "c1.medium": {
-                "Arch": "PV64"
-            },
-            "c1.xlarge": {
-                "Arch": "PV64"
-            },
-            "c3.large": {
-                "Arch": "HVM64"
-            },
-            "c3.xlarge": {
-                "Arch": "HVM64"
-            },
-            "c3.2xlarge": {
-                "Arch": "HVM64"
-            },
-            "c3.4xlarge": {
-                "Arch": "HVM64"
-            },
-            "c3.8xlarge": {
-                "Arch": "HVM64"
-            },
-            "c4.large": {
-                "Arch": "HVM64"
-            },
-            "c4.xlarge": {
-                "Arch": "HVM64"
-            },
-            "c4.2xlarge": {
-                "Arch": "HVM64"
-            },
-            "c4.4xlarge": {
-                "Arch": "HVM64"
-            },
-            "c4.8xlarge": {
-                "Arch": "HVM64"
-            },
-            "g2.2xlarge": {
-                "Arch": "HVMG2"
-            },
-            "g2.8xlarge": {
-                "Arch": "HVMG2"
-            },
-            "r3.large": {
-                "Arch": "HVM64"
-            },
-            "r3.xlarge": {
-                "Arch": "HVM64"
-            },
-            "r3.2xlarge": {
-                "Arch": "HVM64"
-            },
-            "r3.4xlarge": {
-                "Arch": "HVM64"
-            },
-            "r3.8xlarge": {
-                "Arch": "HVM64"
-            },
-            "i2.xlarge": {
-                "Arch": "HVM64"
-            },
-            "i2.2xlarge": {
-                "Arch": "HVM64"
-            },
-            "i2.4xlarge": {
-                "Arch": "HVM64"
-            },
-            "i2.8xlarge": {
-                "Arch": "HVM64"
-            },
-            "d2.xlarge": {
-                "Arch": "HVM64"
-            },
-            "d2.2xlarge": {
-                "Arch": "HVM64"
-            },
-            "d2.4xlarge": {
-                "Arch": "HVM64"
-            },
-            "d2.8xlarge": {
-                "Arch": "HVM64"
-            },
-            "hi1.4xlarge": {
-                "Arch": "HVM64"
-            },
-            "hs1.8xlarge": {
-                "Arch": "HVM64"
-            },
-            "cr1.8xlarge": {
-                "Arch": "HVM64"
-            },
-            "cc2.8xlarge": {
-                "Arch": "HVM64"
-            }
-        },
         "SubnetConfig": {
             "VPC": {
                 "CIDR": "10.10.0.0/16"
@@ -481,179 +167,6 @@
             },
             "PublicC": {
                 "CIDR": "10.10.3.0/24"
-            }
-        },
-        "AWSInstanceType2NATArch": {
-            "t1.micro": {
-                "Arch": "NATPV64"
-            },
-            "t2.nano": {
-                "Arch": "NATHVM64"
-            },
-            "t2.micro": {
-                "Arch": "NATHVM64"
-            },
-            "t2.small": {
-                "Arch": "NATHVM64"
-            },
-            "t2.medium": {
-                "Arch": "NATHVM64"
-            },
-            "t2.large": {
-                "Arch": "NATHVM64"
-            },
-            "m1.small": {
-                "Arch": "NATPV64"
-            },
-            "m1.medium": {
-                "Arch": "NATPV64"
-            },
-            "m1.large": {
-                "Arch": "NATPV64"
-            },
-            "m1.xlarge": {
-                "Arch": "NATPV64"
-            },
-            "m2.xlarge": {
-                "Arch": "NATPV64"
-            },
-            "m2.2xlarge": {
-                "Arch": "NATPV64"
-            },
-            "m2.4xlarge": {
-                "Arch": "NATPV64"
-            },
-            "m3.medium": {
-                "Arch": "NATHVM64"
-            },
-            "m3.large": {
-                "Arch": "NATHVM64"
-            },
-            "m3.xlarge": {
-                "Arch": "NATHVM64"
-            },
-            "m3.2xlarge": {
-                "Arch": "NATHVM64"
-            },
-            "m4.large": {
-                "Arch": "NATHVM64"
-            },
-            "m4.xlarge": {
-                "Arch": "NATHVM64"
-            },
-            "m4.2xlarge": {
-                "Arch": "NATHVM64"
-            },
-            "m4.4xlarge": {
-                "Arch": "NATHVM64"
-            },
-            "m4.10xlarge": {
-                "Arch": "NATHVM64"
-            },
-            "c1.medium": {
-                "Arch": "NATPV64"
-            },
-            "c1.xlarge": {
-                "Arch": "NATPV64"
-            },
-            "c3.large": {
-                "Arch": "NATHVM64"
-            },
-            "c3.xlarge": {
-                "Arch": "NATHVM64"
-            },
-            "c3.2xlarge": {
-                "Arch": "NATHVM64"
-            },
-            "c3.4xlarge": {
-                "Arch": "NATHVM64"
-            },
-            "c3.8xlarge": {
-                "Arch": "NATHVM64"
-            },
-            "c4.large": {
-                "Arch": "NATHVM64"
-            },
-            "c4.xlarge": {
-                "Arch": "NATHVM64"
-            },
-            "c4.2xlarge": {
-                "Arch": "NATHVM64"
-            },
-            "c4.4xlarge": {
-                "Arch": "NATHVM64"
-            },
-            "c4.8xlarge": {
-                "Arch": "NATHVM64"
-            },
-            "g2.2xlarge": {
-                "Arch": "NATHVMG2"
-            },
-            "g2.8xlarge": {
-                "Arch": "NATHVMG2"
-            },
-            "r3.large": {
-                "Arch": "NATHVM64"
-            },
-            "r3.xlarge": {
-                "Arch": "NATHVM64"
-            },
-            "r3.2xlarge": {
-                "Arch": "NATHVM64"
-            },
-            "r3.4xlarge": {
-                "Arch": "NATHVM64"
-            },
-            "r3.8xlarge": {
-                "Arch": "NATHVM64"
-            },
-            "i2.xlarge": {
-                "Arch": "NATHVM64"
-            },
-            "i2.2xlarge": {
-                "Arch": "NATHVM64"
-            },
-            "i2.4xlarge": {
-                "Arch": "NATHVM64"
-            },
-            "i2.8xlarge": {
-                "Arch": "NATHVM64"
-            },
-            "d2.xlarge": {
-                "Arch": "NATHVM64"
-            },
-            "d2.2xlarge": {
-                "Arch": "NATHVM64"
-            },
-            "d2.4xlarge": {
-                "Arch": "NATHVM64"
-            },
-            "d2.8xlarge": {
-                "Arch": "NATHVM64"
-            },
-            "hi1.4xlarge": {
-                "Arch": "NATHVM64"
-            },
-            "hs1.8xlarge": {
-                "Arch": "NATHVM64"
-            },
-            "cr1.8xlarge": {
-                "Arch": "NATHVM64"
-            },
-            "cc2.8xlarge": {
-                "Arch": "NATHVM64"
-            }
-        },
-        "AWSRegionArch2AMI": {
-            "us-east-1": {
-                "PV64": "ami-036de34578cbfa625",
-                "HVM64": "ami-047a51fa27710816e",
-                "HVMG2": "ami-087435bc474caa2c4"
-            },
-            "us-west-2": {
-                "PV64": "ami-07ce23ee168db0386",
-                "HVM64": "ami-027e033da7800f292",
-                "HVMG2": "ami-0e999cbd62129e3b1"
             }
         }
     },
@@ -764,9 +277,7 @@
                 "AllocatedStorage": {
                     "Ref": "RDSMYSQLStorage"
                 },
-                "DBInstanceClass": {
-                    "Ref": "RDSMYSQLInstanceClass"
-                },
+                "DBInstanceClass": "db.t2.small",
                 "Engine": "MySQL",
                 "EngineVersion": "5.7",
                 "DBSubnetGroupName": {
@@ -794,9 +305,7 @@
                 "AllocatedStorage": {
                     "Ref": "FedoraRDSMYSQLStorage"
                 },
-                "DBInstanceClass": {
-                    "Ref": "FedoraRDSMYSQLInstanceClass"
-                },
+                "DBInstanceClass": "db.t2.small",
                 "Engine": "MySQL",
                 "EngineVersion": "5.7",
                 "DBSubnetGroupName": {
@@ -908,26 +417,8 @@
                 "IamInstanceProfile": {
                     "Ref": "InstanceRoleInstanceProfile"
                 },
-                "ImageId": {
-                    "Fn::FindInMap": [
-                        "AWSRegionArch2AMI",
-                        {
-                            "Ref": "AWS::Region"
-                        },
-                        {
-                            "Fn::FindInMap": [
-                                "AWSInstanceType2Arch",
-                                {
-                                    "Ref": "DataInstanceType"
-                                },
-                                "Arch"
-                            ]
-                        }
-                    ]
-                },
-                "InstanceType": {
-                    "Ref": "DataInstanceType"
-                },
+                "ImageId": "ami-047a51fa27710816e",
+                "InstanceType": "t2.medium",
                 "NetworkInterfaces": [
                     {
                         "GroupSet": [
@@ -1056,23 +547,8 @@
                 "IamInstanceProfile": {
                     "Ref": "InstanceRoleInstanceProfile"
                 },
-                "ImageId": {
-                    "Fn::FindInMap": [
-                        "AWSRegionArch2AMI",
-                        {
-                            "Ref": "AWS::Region"
-                        },
-                        {
-                            "Fn::FindInMap": [
-                                "AWSInstanceType2Arch",
-                                {
-                                    "Ref": "WebInstanceType"
-                                },
-                                "Arch"
-                            ]
-                        }
-                    ]
-                },
+                "InstanceType": "t2.medium",
+                "ImageId": "ami-047a51fa27710816e",
                 "NetworkInterfaces": [
                     {
                         "GroupSet": [
@@ -1088,9 +564,6 @@
                         }
                     }
                 ],
-                "InstanceType": {
-                    "Ref": "DataInstanceType"
-                },
                 "KeyName": {
                     "Ref": "KeyName"
                 },
