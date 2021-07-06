@@ -300,7 +300,7 @@
         "RDSDB": {
             "Type": "AWS::RDS::DBInstance",
             "Properties": {
-                "DBSnapshotIdentifier": "arn:aws:rds:us-east-1:127946490116:snapshot:rails-db-ams-stack-restore",
+                "DBSnapshotIdentifier": "arn:aws:rds:us-east-1:127946490116:snapshot:rds:ar1o0zfbqoqn6bb-2021-03-31-03-36",
                 "AllocatedStorage": {
                     "Ref": "RDSMYSQLStorage"
                 },
@@ -323,14 +323,17 @@
                 "MasterUserPassword": {
                     "Ref": "DBPassword"
                 },
-                "MultiAZ": "false"
+                "MultiAZ": "false",
+                "DBParameterGroupName": {
+                    "Ref":  "RDSDBParamGroup"
+                },
             },
             "DeletionPolicy": "Snapshot"
         },
         "FedoraRDSDB": {
             "Type": "AWS::RDS::DBInstance",
             "Properties": {
-                "DBSnapshotIdentifier": "arn:aws:rds:us-east-1:127946490116:snapshot:fedora-db-ams-stack-restore",
+                "DBSnapshotIdentifier": "arn:aws:rds:us-east-1:127946490116:snapshot:rds:afol96fmjnyaq1-2021-03-30-05-09",
                 "AllocatedStorage": {
                     "Ref": "FedoraRDSMYSQLStorage"
                 },
@@ -353,9 +356,32 @@
                 "MasterUserPassword": {
                     "Ref": "FedoraDBPassword"
                 },
-                "MultiAZ": "false"
+                "MultiAZ": "false",
+                "DBParameterGroupName": {
+                    "Ref":  "FedoraRDSDBParamGroup"
+                }
             },
             "DeletionPolicy": "Snapshot"
+        },
+        "RDSDBParamGroup": {
+            "Type": "AWS::RDS::DBParameterGroup",
+            "Properties": {
+                "Family": "MySQL5.5",
+                "Description": "ParameterGroup for RDSDB",
+                "Parameters": {
+                    "max_allowed_packet": "67108864",
+                },
+            },
+        },
+        "FedoraRDSDBParamGroup": {
+            "Type": "AWS::RDS::DBParameterGroup",
+            "Properties": {
+                "Family": "MySQL5.7",
+                "Description": "ParameterGroup for RDSDB",
+                "Parameters": {
+                    "max_allowed_packet": "67108864",
+                },
+            },
         },
         "CacheSubnetGroup": {
             "Type": "AWS::ElastiCache::SubnetGroup",
@@ -448,8 +474,8 @@
                 "IamInstanceProfile": {
                     "Ref": "InstanceRoleInstanceProfile"
                 },
-                "InstanceType": "t2.medium",
                 "ImageId": "ami-047a51fa27710816e",
+                "InstanceType": "t2.medium",
                 "NetworkInterfaces": [
                     {
                         "GroupSet": [
@@ -543,7 +569,7 @@
                                 },
                                 "/opt/solr/bin/init.d/solr restart\n",
                                 "\n",
-                                "chkconfig tomcat7 on\n",
+                                "chkconfig tomcat on\n",
                                 "chkconfig solr on\n",
                                 "/opt/aws/bin/cfn-signal -e 0",
                                 "\n"
@@ -558,7 +584,7 @@
                 }
             }
         },
-        "WebInstance": {
+                "WebInstance": {
             "Type": "AWS::EC2::Instance",
             "DependsOn": "RDSDB",
             "Properties": {
@@ -857,7 +883,7 @@
                                 "' >> /etc/profile\n",
                                 "echo '\n",
                                 "<VirtualHost _default_:*>\n",
-                                "    ServerName ams.wgbh.org\n",
+                                "ServerName ", { "Ref": "ServerName" }, "\n",
                                 "\n",
                                 "    # Tell Apache and Passenger where your apps public directory is\n",
                                 "    DocumentRoot /var/www/ams/public\n",
