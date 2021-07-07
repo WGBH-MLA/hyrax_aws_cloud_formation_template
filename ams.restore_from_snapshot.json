@@ -300,7 +300,7 @@
         "RDSDB": {
             "Type": "AWS::RDS::DBInstance",
             "Properties": {
-                "DBSnapshotIdentifier": "arn:aws:rds:us-east-1:127946490116:snapshot:rds:ar1o0zfbqoqn6bb-2021-03-31-03-36",
+                "DBSnapshotIdentifier": "REPLACE WITH ARN OF RAILS RDS DB SNAPSHOT",
                 "AllocatedStorage": {
                     "Ref": "RDSMYSQLStorage"
                 },
@@ -308,7 +308,7 @@
                     "Ref": "RDSMYSQLInstanceClass"
                 },
                 "Engine": "MySQL",
-                "EngineVersion": "5.5",
+                "EngineVersion": "5.6",
                 "DBSubnetGroupName": {
                     "Ref": "MyDBSubnetGroup"
                 },
@@ -333,7 +333,7 @@
         "FedoraRDSDB": {
             "Type": "AWS::RDS::DBInstance",
             "Properties": {
-                "DBSnapshotIdentifier": "arn:aws:rds:us-east-1:127946490116:snapshot:rds:afol96fmjnyaq1-2021-03-30-05-09",
+                "DBSnapshotIdentifier": "REPLACE WITH ARN OF FEDORA RDS DB SNAPSHOT",
                 "AllocatedStorage": {
                     "Ref": "FedoraRDSMYSQLStorage"
                 },

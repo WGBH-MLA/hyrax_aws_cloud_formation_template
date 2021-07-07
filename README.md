@@ -53,8 +53,7 @@ running the AMS web app.
       1. Enter the deployment group that was created as part of the stack. It
          should be named the same as the stack, with a "-DG" suffix.
       1. Select the "My application is stored in Github" option.
-      1. Enter the Github token name: 'jasoncorum'. (NOTE: if this stops
-         working, we can connect another Github account).
+      1. Enter the Github token name.
       1. Enter the repository name: "wgbh-mla/ams".
       1. Enter the commit hash of the commit you want to deploy. **NOTE:
          Due to a branching convention we never truly followed, we do not
@@ -75,14 +74,17 @@ to the point-in-time that the snapshots were taken.
 
 ### Steps
 
-1. Make sure you have the latest version of `ams.restore_from_backups.json` from this
+1. Make sure you have the latest version of `ams.restore_from_snapshot.json` from this
    repository saved to your local machine.
+1. If you're recreating from an existing instance, ssh in to the active EC2 instance hosting Solr and Fedora to copy their data directories.
+  1. The Fedora data directory is currently located at: /mnt/fedora-data
+  1. The Solr data directory is currently located at: /var/solr/data/ams/data
 1. Log into AWS Management Console.
 1. Navigate to RDS
 1. Click on "DB Instances"
 1. Create snapshots of the MySQL RDS instances for Rails and Fedora by clicking on "Actions" >> "Take Snapshot"
    1. Copy the Amazon Resource Names (ARNs).
-   1. Edit your local version of `ams.restore_from_backups.json`
+   1. Edit your local version of `ams.restore_from_snapshot.json`
       1. Enter the Rails DB ARN where it says: "REPLACE WITH ARN OF RAILS RDS DB SNAPSHOT"
       1. Enter the Fedora DB ARN where it says: "REPLACE WITH ARN OF FEDORA RDS DB SNAPSHOT"
 1. Navigate to EC2
@@ -127,8 +129,7 @@ to the point-in-time that the snapshots were taken.
       1. Enter the deployment group that was created as part of the stack. It
          should be named the same as the stack, with a "-DG" suffix.
       1. Select the "My application is stored in Github" option.
-      1. Enter the Github token name: 'jasoncorum'. (NOTE: if this stops
-         working, we can connect another Github account).
+      1. Enter the Github token name.
       1. Enter the repository name: "wgbh-mla/ams".
       1. Enter the commit hash of the commit you want to deploy. **NOTE:
          Due to a branching convention we never truly followed, we do not
