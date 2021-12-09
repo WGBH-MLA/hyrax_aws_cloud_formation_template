@@ -366,7 +366,7 @@
         "RDSDBParamGroup": {
             "Type": "AWS::RDS::DBParameterGroup",
             "Properties": {
-                "Family": "MySQL5.5",
+                "Family": "MySQL5.6",
                 "Description": "ParameterGroup for RDSDB",
                 "Parameters": {
                     "max_allowed_packet": "67108864",
@@ -584,7 +584,7 @@
                 }
             }
         },
-                "WebInstance": {
+        "WebInstance": {
             "Type": "AWS::EC2::Instance",
             "DependsOn": "RDSDB",
             "Properties": {
