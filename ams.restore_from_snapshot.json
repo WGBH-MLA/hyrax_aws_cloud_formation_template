@@ -13,13 +13,6 @@
             "AllowedPattern": "(\\d+\\.){2}(\\d+)",
             "ConstraintDescription": "must be a valid Ruby version, e.g. 2.5.3."
         },
-        "RailsVersion": {
-            "Description": "Version number for Ruby on Rails",
-            "Default": "5.1.5",
-            "Type": "String",
-            "AllowedPattern": "(\\d+\\.){2}(\\d+)",
-            "ConstraintDescription": "must be a valid Ruby on Rails version, e.g. 5.1.5."
-        },
         "Environment": {
             "Default": "production",
             "Description": "Rails Environment name",
@@ -57,18 +50,23 @@
             "ConstraintDescription": "must select a valid Redis Cache Node type."
         },
         "RDSMYSQLInstanceClass": {
-            "Default": "db.t2.small",
+            "Default": "db.t3.2xlarge",
             "Description": "The database instance type",
             "Type": "String",
             "AllowedValues": [
                 "db.t2.small",
                 "db.t2.medium",
+                "db.t3.2xlarge",
                 "db.m1.small",
                 "db.m1.large",
                 "db.m4.xlarge",
                 "db.m4.4xlarge"
             ],
             "ConstraintDescription": "must contain only alphanumeric characters."
+        },
+        "RDSDBSnapshotIdentifier": {
+            "Description": "The snapshot identifier for the Rails RDS DB",
+            "Type": "String"
         },
         "RDSMYSQLStorage": {
             "Default": "20",
@@ -106,12 +104,13 @@
             "ConstraintDescription": "must contain only alphanumeric characters."
         },
         "FedoraRDSMYSQLInstanceClass": {
-            "Default": "db.t2.small",
+            "Default": "db.t3.2xlarge",
             "Description": "The Fedora database instance type",
             "Type": "String",
             "AllowedValues": [
                 "db.t2.small",
                 "db.t2.medium",
+                "db.t3.2xlarge",
                 "db.m1.small",
                 "db.m4.large",
                 "db.m4.xlarge",
@@ -119,6 +118,10 @@
                 "db.m4.4xlarge"
             ],
             "ConstraintDescription": "must contain only alphanumeric characters."
+        },
+        "FedoraRDSDBSnapshotIdentifier": {
+            "Description": "The Fedora snapshot identifier for the Fedora RDS DB",
+            "Type": "String"
         },
         "FedoraRDSMYSQLStorage": {
             "Default": "20",
@@ -129,7 +132,7 @@
             "ConstraintDescription": "must be between 5 and 1024Gb."
         },
         "FedoraDBUser": {
-            "Default": "fedora",
+            "Default": "admin",
             "Description": "Mysql username used by Fedora",
             "Type": "String",
             "MinLength": "3",
@@ -161,10 +164,14 @@
             "MinValue": "1",
             "MaxValue": "1000"
         },
+        "DataInstanceImageId": {
+            "Description": "Image ID created from Snapshot of Data Instance",
+            "Type": "String"
+        },
         "DataInstanceVolumeSize": {
             "Description": "Size of the EBS volume if attached",
             "Type": "Number",
-            "Default": "8",
+            "Default": "16",
             "MinValue": "1",
             "MaxValue": "1000"
         },
@@ -179,9 +186,9 @@
         },
         "ServerName": {
             "Description": "Name of the server used in Apache configuration and SSL",
-            "Default": "ams.wgbh.org",
+            "Default": "ams2.wgbh-mla.org",
             "Type": "String"
-        },
+        }
     },
     "Mappings": {
         "SubnetConfig": {
@@ -300,7 +307,9 @@
         "RDSDB": {
             "Type": "AWS::RDS::DBInstance",
             "Properties": {
-                "DBSnapshotIdentifier": "REPLACE WITH ARN OF RAILS RDS DB SNAPSHOT",
+                "DBSnapshotIdentifier": {
+                    "Ref": "RDSDBSnapshotIdentifier"
+                },
                 "AllocatedStorage": {
                     "Ref": "RDSMYSQLStorage"
                 },
@@ -326,14 +335,16 @@
                 "MultiAZ": "false",
                 "DBParameterGroupName": {
                     "Ref":  "RDSDBParamGroup"
-                },
+                }
             },
             "DeletionPolicy": "Snapshot"
         },
         "FedoraRDSDB": {
             "Type": "AWS::RDS::DBInstance",
             "Properties": {
-                "DBSnapshotIdentifier": "REPLACE WITH ARN OF FEDORA RDS DB SNAPSHOT",
+                "DBSnapshotIdentifier": {
+                    "Ref": "FedoraRDSDBSnapshotIdentifier"
+                },
                 "AllocatedStorage": {
                     "Ref": "FedoraRDSMYSQLStorage"
                 },
@@ -369,9 +380,9 @@
                 "Family": "MySQL5.6",
                 "Description": "ParameterGroup for RDSDB",
                 "Parameters": {
-                    "max_allowed_packet": "67108864",
-                },
-            },
+                    "max_allowed_packet": "67108864"
+                }
+            }
         },
         "FedoraRDSDBParamGroup": {
             "Type": "AWS::RDS::DBParameterGroup",
@@ -379,9 +390,9 @@
                 "Family": "MySQL5.7",
                 "Description": "ParameterGroup for RDSDB",
                 "Parameters": {
-                    "max_allowed_packet": "67108864",
-                },
-            },
+                    "max_allowed_packet": "67108864"
+                }
+            }
         },
         "CacheSubnetGroup": {
             "Type": "AWS::ElastiCache::SubnetGroup",
@@ -474,8 +485,10 @@
                 "IamInstanceProfile": {
                     "Ref": "InstanceRoleInstanceProfile"
                 },
-                "ImageId": "ami-047a51fa27710816e",
-                "InstanceType": "t2.medium",
+                "ImageId": {
+                    "Ref": "DataInstanceImageId"
+                },
+                "InstanceType": "t3.xlarge",
                 "NetworkInterfaces": [
                     {
                         "GroupSet": [
@@ -604,7 +617,7 @@
                 "IamInstanceProfile": {
                     "Ref": "InstanceRoleInstanceProfile"
                 },
-                "InstanceType": "t2.medium",
+                "InstanceType": "t3.xlarge",
                 "ImageId": "ami-047a51fa27710816e",
                 "NetworkInterfaces": [
                     {
@@ -876,6 +889,16 @@
                                                     "RedisCluster",
                                                     "RedisEndpoint.Address"
                                                 ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "Fn::Sub": [
+                                        "export PRODUCTION_HOST=${PRODUCTION_HOST}\n",
+                                        {
+                                            "PRODUCTION_HOST": {
+                                                "Ref": "ServerName"
                                             }
                                         }
                                     ]
